@@ -1,5 +1,10 @@
 # AccessibleColors
 
+[![NuGet](https://img.shields.io/nuget/v/AccessibleColors.svg?label=NuGet)](https://www.nuget.org/packages/AccessibleColors/)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/AccessibleColors.svg)](https://www.nuget.org/packages/AccessibleColors/)
+[![Build](https://github.com/willibrandon/AccessibleColors/actions/workflows/ci.yml/badge.svg)](https://github.com/willibrandon/AccessibleColors/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 **AccessibleColors** is a lightweight C# library that provides O(1) methods to compute WCAG-compliant contrast colors. Given a background color, it instantly returns a suitable foreground color that meets or exceeds the standard WCAG 2.2 contrast ratio of 4.5:1 for normal text.
 
 ## Key Features
@@ -7,11 +12,11 @@
 - **WCAG Compliance**: Ensures at least a 4.5:1 contrast ratio by default, helping you create accessible user interfaces.
 - **O(1) Performance**: Uses a precomputed lookup table (LUT) for sRGB-to-linear conversions, allowing instant calculations.
 - **No External Dependencies**: Relies only on `System.Drawing` types for colors, making integration straightforward.
-- **Simple API**: A single `GetContrastColor` extension method on `Color` and a `IsCompliant` method let you easily ensure accessibility.
+- **Simple API**: A single `GetContrastColor` extension method on `Color` and an `IsCompliant` method let you easily ensure accessibility.
 
 ## Getting Started
 
-1. **Install**: Add the library as a reference to your project. If published as a NuGet package, install via:
+1. **Install**: Add the library as a reference to your project. Since it’s published on NuGet:
    ```bash
    dotnet add package AccessibleColors
    ```
@@ -32,7 +37,7 @@
    ```
 
 3. **Integrate Into Your UI**:  
-   Use `GetContrastColor` anywhere you need to select text or icon colors based on a dynamically changing background, such as in custom theming, responsive UI adjustments, or design tools.
+   Use `GetContrastColor` anywhere you need to select text or icon colors based on a dynamically changing background—custom theming, responsive UI adjustments, or design tools.
 
 ## Example
 
