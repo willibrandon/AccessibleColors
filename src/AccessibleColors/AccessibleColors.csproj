@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<Version>1.0.0</Version>
+		<Version>1.0.1</Version>
 		<Authors>Author</Authors>
 		<Description>
 			Provides O(1) methods for computing WCAG 2.2-compliant contrast colors,
