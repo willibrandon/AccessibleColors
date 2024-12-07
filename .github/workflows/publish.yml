@@ -32,7 +32,7 @@ jobs:
     
     - name: Pack
       run: |
-        dotnet pack src/AccessibleColors.csproj -c Release -o packages -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
+        dotnet pack src/AccessibleColors/AccessibleColors.csproj -c Release -o packages -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
     
     - name: Push to NuGet
       run: dotnet nuget push "packages/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
