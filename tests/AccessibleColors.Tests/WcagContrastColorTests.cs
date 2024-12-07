@@ -5,7 +5,7 @@ namespace AccessibleColors.Tests;
 public class WcagContrastColorTests
 {
     // Introduce a small tolerance for floating point comparisons.
-    // WCAG requires >=4.5, but we’ll accept ≥4.45 to avoid floating-point edge cases.
+    // WCAG requires >=4.5, but we’ll accept >=4.45 to avoid floating-point edge cases.
     private const double RequiredRatio = 4.45;
 
     [Fact]
