@@ -5,7 +5,7 @@ VisualStudioVersion = 17.12.35521.163
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccessibleColors.Benchmarks", "perf\AccessibleColors.Benchmarks\AccessibleColors.Benchmarks.csproj", "{31DF336D-5AF9-451C-9D7F-2FF5A1571646}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccessibleColors", "src\WcagContrastColor\AccessibleColors.csproj", "{8ED3728F-170F-4425-AD47-30E3423E0623}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccessibleColors", "src\AccessibleColors\AccessibleColors.csproj", "{8ED3728F-170F-4425-AD47-30E3423E0623}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccessibleColors.Tests", "tests\AccessibleColors.Tests\AccessibleColors.Tests.csproj", "{4B1D852C-7DFA-4030-9147-C2B6C0FC3C9F}"
 EndProject

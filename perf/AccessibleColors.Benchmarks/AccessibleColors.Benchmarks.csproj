@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\WcagContrastColor\AccessibleColors.csproj" />
+    <ProjectReference Include="..\..\src\AccessibleColors\AccessibleColors.csproj" />
   </ItemGroup>
 
 </Project>
