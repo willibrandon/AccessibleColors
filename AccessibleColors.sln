@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35521.163
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccessibleColors.Benchmarks", "perf\AccessibleColors.Benchmarks\AccessibleColors.Benchmarks.csproj", "{31DF336D-5AF9-451C-9D7F-2FF5A1571646}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccessibleColors", "src\WcagContrastColor\AccessibleColors.csproj", "{8ED3728F-170F-4425-AD47-30E3423E0623}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccessibleColors.Tests", "tests\AccessibleColors.Tests\AccessibleColors.Tests.csproj", "{4B1D852C-7DFA-4030-9147-C2B6C0FC3C9F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{D1109DD0-14DF-4185-B03A-0E14D2921762}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A68CBFE3-8AC8-422E-90B9-DDBA24A3D65A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "perf", "perf", "{F5DCAC7A-5C55-49EF-9E48-DD87379AE42F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{656D80FA-5B7A-4E9D-A8C9-8BB2BD753806}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "eng", "eng", "{18298AF1-4061-4465-A1DC-9CB57BD5652D}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\ci.yml = .github\workflows\ci.yml
+		.github\workflows\publish.yml = .github\workflows\publish.yml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{31DF336D-5AF9-451C-9D7F-2FF5A1571646}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31DF336D-5AF9-451C-9D7F-2FF5A1571646}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31DF336D-5AF9-451C-9D7F-2FF5A1571646}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31DF336D-5AF9-451C-9D7F-2FF5A1571646}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8ED3728F-170F-4425-AD47-30E3423E0623}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8ED3728F-170F-4425-AD47-30E3423E0623}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8ED3728F-170F-4425-AD47-30E3423E0623}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8ED3728F-170F-4425-AD47-30E3423E0623}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B1D852C-7DFA-4030-9147-C2B6C0FC3C9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B1D852C-7DFA-4030-9147-C2B6C0FC3C9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B1D852C-7DFA-4030-9147-C2B6C0FC3C9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B1D852C-7DFA-4030-9147-C2B6C0FC3C9F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{31DF336D-5AF9-451C-9D7F-2FF5A1571646} = {F5DCAC7A-5C55-49EF-9E48-DD87379AE42F}
+		{8ED3728F-170F-4425-AD47-30E3423E0623} = {A68CBFE3-8AC8-422E-90B9-DDBA24A3D65A}
+		{4B1D852C-7DFA-4030-9147-C2B6C0FC3C9F} = {D1109DD0-14DF-4185-B03A-0E14D2921762}
+	EndGlobalSection
+EndGlobal

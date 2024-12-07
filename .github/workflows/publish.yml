@@ -1,0 +1,47 @@
+name: Publish NuGet Packages
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write # Required for creating releases
+  packages: write # Required for pushing packages
+
+jobs:
+  publish:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    
+    - name: Test
+      run: dotnet test --configuration Release --no-build --verbosity normal
+    
+    - name: Pack
+      run: |
+        dotnet pack src/AccessibleColors.csproj -c Release -o packages -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
+    
+    - name: Push to NuGet
+      run: dotnet nuget push "packages/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+    - name: Push to GitHub
+      run: dotnet nuget push "packages/*.nupkg" --api-key ${{ secrets.GH_API_KEY }} --source https://nuget.pkg.github.com/willibrandon/index.json --skip-duplicate
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: packages/*.nupkg
+        generate_release_notes: true
