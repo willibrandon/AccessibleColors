@@ -9,21 +9,26 @@
 
 	<PropertyGroup>
 		<Version>1.0.1</Version>
-		<Authors>Author</Authors>
-		<Description>
-			Provides O(1) methods for computing WCAG 2.2-compliant contrast colors,
-			instantly delivering accessible foreground colors for any given background.
-			Ensures a default 4.5:1 contrast ratio for inclusive, accessible user interfaces.
-		</Description>
+		<Authors>willibrandon</Authors>
+		<Description>Provides O(1) methods for computing WCAG 2.2-compliant contrast colors, instantly delivering accessible foreground colors for any given background. Ensures a default 4.5:1 contrast ratio for inclusive, accessible user interfaces.</Description>
+		<IncludeSymbols>True</IncludeSymbols>
+		<PackageIcon>icon_128x128.png</PackageIcon>
+		<PackageId>AccessibleColors</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/willibrandon/AccessibleColors</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageTags>accessibility;wcag;contrast;colors;ui;usability;design</PackageTags>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/willibrandon/AccessibleColors</RepositoryUrl>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<Title>AccessibleColors: O(1) WCAG-Compliant Contrast Colors for Inclusive UI Design </Title>
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Include="..\..\docs\images\icon_128x128.png">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
+		</None>
 		<None Include="..\..\README.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
