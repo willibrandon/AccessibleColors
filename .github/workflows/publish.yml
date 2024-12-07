@@ -31,10 +31,11 @@ jobs:
       run: dotnet test --configuration Release --no-build --verbosity normal
     
     - name: Pack
-      run: |
-        dotnet pack src/AccessibleColors/AccessibleColors.csproj -c Release -o packages -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
-    
-    - name: Push to NuGet
+      working-directory: ./AccessibleColors
+      run: dotnet pack src/AccessibleColors/AccessibleColors.csproj -c Release -o packages
+
+    - name: Push
+      working-directory: ./AccessibleColors
       run: dotnet nuget push "packages/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
 
     - name: Push to GitHub
