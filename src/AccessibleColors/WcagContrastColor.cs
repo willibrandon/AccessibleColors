@@ -45,7 +45,6 @@ public static class WcagContrastColor
     /// </summary>
     /// <param name="background">The background <see cref="Color"/> to find a suitable foreground for.</param>
     /// <returns>A <see cref="Color"/> that meets or exceeds the standard WCAG contrast ratio of 4.5:1.</returns>
-
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color GetContrastColor(this Color background)
     {
@@ -112,7 +111,6 @@ public static class WcagContrastColor
     /// <returns>
     /// The contrast ratio, a value >= 1.0, where higher indicates greater contrast.
     /// </returns>
-
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static double CalculateContrastRatio(float L1, float L2)
     {
@@ -144,7 +142,6 @@ public static class WcagContrastColor
     /// </summary>
     /// <param name="value">An sRGB component value between 0.0 and 1.0.</param>
     /// <returns>The linearized component value.</returns>
-
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static float NormalizeSrgbComponent(float value)
     {
