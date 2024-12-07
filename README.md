@@ -16,7 +16,7 @@
 
 ## Getting Started
 
-1. **Install**: Add the library as a reference to your project. Since it’s published on NuGet:
+1. **Install**: Add the library as a reference to your project. Since it's published on NuGet:
    ```bash
    dotnet add package AccessibleColors
    ```
@@ -37,7 +37,7 @@
    ```
 
 3. **Integrate Into Your UI**:  
-   Use `GetContrastColor` anywhere you need to select text or icon colors based on a dynamically changing background—custom theming, responsive UI adjustments, or design tools.
+   Use `GetContrastColor` anywhere you need to select text or icon colors based on a dynamically changing background, custom theming, responsive UI adjustments, or design tools.
 
 ## Example
 
