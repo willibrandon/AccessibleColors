@@ -57,6 +57,39 @@ In addition to single contrast colors, **AccessibleColors** also offers a dynami
    // Use them for various UI states or theme elements.
    ```
 
+4. **Integrate Into Your UI:**
+
+    Use `GetContrastColor` and `GenerateAccessibleRamp` anywhere you need accessible colors dynamically—custom themes, responsive adjustments, or design tools.
+    
+    For example:
+
+    ```csharp
+    // Suppose you have a brand accent color and you want to theme your app's buttons for dark mode.
+    // First, generate a 5-step accessible ramp:
+    var baseAccent = Color.FromArgb(0, 120, 215);
+    bool darkMode = true;
+    int steps = 5;
+
+    IReadOnlyList<Color> accessibleRamp = AccessibleColors.GenerateAccessibleRamp(baseAccent, steps, darkMode);
+
+    // Now assign these ramp colors to different states of a custom button:
+    myButton.NormalColor = accessibleRamp[0];
+    myButton.HoverColor = accessibleRamp[1];
+    myButton.PressedColor = accessibleRamp[2];
+    myButton.FocusColor = accessibleRamp[3];
+    myButton.DisabledColor = accessibleRamp[4];
+
+    // Each color in the ramp maintains WCAG contrast standards against the chosen background,
+    // ensuring your button remains readable and visually consistent in all interactive states.
+
+    // For icons, text, or other elements over a known background, directly use GetContrastColor:
+    var bg = Color.FromArgb(32, 32, 32); // Dark background
+    var iconColor = bg.GetContrastColor(); 
+    myIcon.ForeColor = iconColor; // Ensures the icon remains visible and accessible.
+    ```
+
+By leveraging `GenerateAccessibleRamp` and `GetContrastColor`, you ensure that every UI element—whether a button state or an icon—is accessible, readable, and adheres to WCAG guidelines, even as the theme or background colors change.
+
 ## Example
 
 ```csharp
