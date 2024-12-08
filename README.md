@@ -75,12 +75,12 @@ In addition to single contrast colors, **AccessibleColors** also offers a dynami
    IReadOnlyList<Color> ramp = AccessibleColors.GenerateAccessibleRamp(baseColor, steps, darkMode);
 
    // Each color in 'ramp' should meet WCAG compliance against the chosen background.
-    // Use them for various UI states or theme elements.
+   // Use them for various UI states or theme elements.
    ```
 
 5. **Integrate Into Your UI**:
 
-    Use `etContrastColor` and `GenerateAccessibleRamp` anywhere you need accessible colors dynamically, custom themes, responsive adjustments, or design tools.
+    Use `GetContrastColor`, `GenerateAccessibleRamp`, `GetContrastColorForText`, and `IsTextCompliant` anywhere you need accessible colors dynamically, custom themes, responsive adjustments, or design tools.
 
     For example:
    ```csharp
