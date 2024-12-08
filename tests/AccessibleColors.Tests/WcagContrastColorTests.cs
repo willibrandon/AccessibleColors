@@ -9,6 +9,19 @@ public class WcagContrastColorTests
     private const double RequiredRatio = 4.45;
 
     [Fact]
+    public void CheckContrastColorForText_LargeBold_ReturnsBetterColor()
+    {
+        var bg = Color.FromArgb(255, 255, 255);
+        double textSize = 18.0;
+        bool isBold = true;
+
+        // Given a background of white, for large bold text, even a mid-gray might suffice.
+        // But if not, we expect it to pick either black or white that meets at least 3:1.
+        Color chosen = bg.GetContrastColorForText(textSize, isBold);
+        Assert.True(WcagContrastColor.IsTextCompliant(bg, chosen, textSize, isBold));
+    }
+
+    [Fact]
     public void GetContrastColor_OnBlackBackground_ShouldReturnWhiteOrBlack()
     {
         var background = Color.Black;
@@ -95,6 +108,35 @@ public class WcagContrastColorTests
         var foreground = Color.Red;
         Assert.False(WcagContrastColor.IsCompliant(background, foreground),
             "Red text on white background typically fails the 4.5:1 ratio for normal text.");
+    }
+
+    [Theory]
+    [InlineData(255, 255, 255, 18, false, true)] // White bg, large text, normal weight
+    [InlineData(0, 0, 0, 14, true, true)]       // Black bg, bold 14pt text (large)
+    public void LargeTextScenarios(int br, int bg, int bb,
+                               double textSize, bool isBold, bool expected)
+    {
+        var background = Color.FromArgb(br, bg, bb);
+
+        // We now rely on GetContrastColorForText to pick a suitable color (black or white)
+        Color chosen = background.GetContrastColorForText(textSize, isBold);
+
+        // Now verify that chosen color is compliant for given text size/weight
+        bool actual = WcagContrastColor.IsTextCompliant(background, chosen, textSize, isBold);
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory]
+    [InlineData(255, 255, 255, 0, 0, 0, 12, false, true)] // Normal text scenario, black on white
+    [InlineData(0, 0, 0, 255, 255, 255, 12, false, true)] // Normal text scenario, white on black
+    public void NormalTextScenarios(int br, int bg, int bb,
+                                        int fr, int fg, int fb,
+                                        double textSize, bool isBold, bool expected)
+    {
+        var background = Color.FromArgb(br, bg, bb);
+        var foreground = Color.FromArgb(fr, fg, fb);
+        bool actual = WcagContrastColor.IsTextCompliant(background, foreground, textSize, isBold);
+        Assert.Equal(expected, actual);
     }
 
     [Theory]

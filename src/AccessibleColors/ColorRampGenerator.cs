@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using System.Runtime.CompilerServices;
 
 namespace AccessibleColors;
 
@@ -16,7 +15,7 @@ public static class ColorRampGenerator
     public static IReadOnlyList<Color> GenerateAccessibleRamp(Color baseColor, int steps, bool darkMode)
     {
         if (steps <= 0)
-            return [];
+            Array.Empty<Color>();
 
         Color bg = darkMode ? Color.FromArgb(32, 32, 32) : Color.White;
         float bgLum = ColorUtilities.GetLuminance(bg);

@@ -10,7 +10,9 @@ namespace AccessibleColors;
 /// </summary>
 internal static class ColorUtilities
 {
-    private const double RequiredRatio = 4.5;
+    internal const double RequiredRatioNormalText = 4.5;
+    internal const double RequiredRatioLargeText = 3.0;
+
     private const float Xn = 0.95047f;
     private const float Yn = 1.00000f;
     private const float Zn = 1.08883f;
@@ -55,7 +57,7 @@ internal static class ColorUtilities
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static Color AttemptCompliance(float L, float C, float H, float bgLum, bool darkMode)
     {
-        if (CheckCompliance(L, C, H, bgLum, RequiredRatio))
+        if (CheckCompliance(L, C, H, bgLum, RequiredRatioNormalText))
             return LCHToRGB(L, C, H);
 
         float minL = darkMode ? L : 0f;
@@ -63,7 +65,7 @@ internal static class ColorUtilities
         for (int attempt = 0; attempt < 2; attempt++)
         {
             float midL = (minL + maxL) * 0.5f;
-            if (CheckCompliance(midL, C, H, bgLum, RequiredRatio))
+            if (CheckCompliance(midL, C, H, bgLum, RequiredRatioNormalText))
             {
                 L = midL;
                 break;
@@ -73,30 +75,30 @@ internal static class ColorUtilities
                 double ratio = GetRatio(midL, C, H, bgLum);
                 if (darkMode)
                 {
-                    // Need lighter if ratio < RequiredRatio
-                    if (ratio < RequiredRatio) minL = midL; else maxL = midL;
+                    // Need lighter if ratio < RequiredRatioNormalText
+                    if (ratio < RequiredRatioNormalText) minL = midL; else maxL = midL;
                 }
                 else
                 {
-                    // Need darker if ratio < RequiredRatio
-                    if (ratio < RequiredRatio) maxL = midL; else minL = midL;
+                    // Need darker if ratio < RequiredRatioNormalText
+                    if (ratio < RequiredRatioNormalText) maxL = midL; else minL = midL;
                 }
                 L = midL;
             }
         }
 
-        if (CheckCompliance(L, C, H, bgLum, RequiredRatio))
+        if (CheckCompliance(L, C, H, bgLum, RequiredRatioNormalText))
             return LCHToRGB(L, C, H);
 
         // Adjust chroma:
         for (int attempt = 0; attempt < 2; attempt++)
         {
             float decC = MathF.Max(C - 5f, 0f);
-            if (CheckCompliance(L, decC, H, bgLum, RequiredRatio))
+            if (CheckCompliance(L, decC, H, bgLum, RequiredRatioNormalText))
                 return LCHToRGB(L, decC, H);
 
             float incC = MathF.Min(C + 5f, 100f);
-            if (CheckCompliance(L, incC, H, bgLum, RequiredRatio))
+            if (CheckCompliance(L, incC, H, bgLum, RequiredRatioNormalText))
                 return LCHToRGB(L, incC, H);
         }
 
@@ -104,11 +106,11 @@ internal static class ColorUtilities
         for (int attempt = 0; attempt < 2; attempt++)
         {
             float plusH = (H + 2f) % 360f;
-            if (CheckCompliance(L, C, plusH, bgLum, RequiredRatio))
+            if (CheckCompliance(L, C, plusH, bgLum, RequiredRatioNormalText))
                 return LCHToRGB(L, C, plusH);
 
             float minusH = (H - 2f + 360f) % 360f;
-            if (CheckCompliance(L, C, minusH, bgLum, RequiredRatio))
+            if (CheckCompliance(L, C, minusH, bgLum, RequiredRatioNormalText))
                 return LCHToRGB(L, C, minusH);
         }
 
@@ -166,14 +168,14 @@ internal static class ColorUtilities
         if (darkMode)
         {
             for (float testL = L; testL <= 100f; testL += step)
-                if (CheckCompliance(testL, C, H, bgLum, RequiredRatio))
+                if (CheckCompliance(testL, C, H, bgLum, RequiredRatioNormalText))
                     return testL;
             return 100f;
         }
         else
         {
             for (float testL = L; testL >= 0f; testL -= step)
-                if (CheckCompliance(testL, C, H, bgLum, RequiredRatio))
+                if (CheckCompliance(testL, C, H, bgLum, RequiredRatioNormalText))
                     return testL;
             return 0f;
         }
@@ -186,6 +188,39 @@ internal static class ColorUtilities
     internal static float Fxyz(float t)
     {
         return (t > 0.008856f) ? MathF.Pow(t, 1f / 3f) : (7.787f * t) + (16f / 116f);
+    }
+
+    /// <summary>
+    /// Returns a color (black or white) that meets or exceeds the specified 
+    /// contrast ratio requirement against the given background color. 
+    /// If both black and white pass, it returns the one with the greater contrast. 
+    /// If neither strictly meets the requirement, it returns the one with the best ratio.
+    /// </summary>
+    /// <param name="background">The background <see cref="Color"/> against which to ensure contrast.</param>
+    /// <param name="requiredRatio">
+    /// The desired WCAG contrast ratio. Typically 4.5 for normal text, or 3.0 for large/bold text.
+    /// </param>
+    /// <returns>
+    /// A <see cref="Color"/> (either black or white) that provides the highest 
+    /// possible contrast ratio, meeting or exceeding the specified requirement if possible.
+    /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Color GetContrastColorWithRatio(Color background, double requiredRatio)
+    {
+        float bgLum = GetLuminance(background);
+        double ratioBlack = CalculateContrastRatio(bgLum, 0.0f);
+        double ratioWhite = CalculateContrastRatio(bgLum, 1.0f);
+
+        bool blackPasses = ratioBlack >= requiredRatio;
+        bool whitePasses = ratioWhite >= requiredRatio;
+
+        if (blackPasses && whitePasses)
+            return (ratioBlack > ratioWhite) ? Color.Black : Color.White;
+        if (blackPasses) return Color.Black;
+        if (whitePasses) return Color.White;
+
+        // If neither passes, pick the best:
+        return (ratioBlack > ratioWhite) ? Color.Black : Color.White;
     }
 
     /// <summary>
@@ -216,6 +251,21 @@ internal static class ColorUtilities
     }
 
     /// <summary>
+    /// Determines the required WCAG contrast ratio based on text size and weight.
+    /// - Normal text: ≥4.5:1
+    /// - Large text (≥18pt or ≥14pt bold): ≥3:1
+    /// </summary>
+    /// <param name="textSizePt">Text size in points.</param>
+    /// <param name="isBold">True if text is bold. Bold + ≥14pt counts as large text.</param>
+    /// <returns>The required WCAG ratio for the given conditions.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static double GetRequiredRatioForText(double textSizePt, bool isBold)
+    {
+        bool isLarge = (textSizePt >= 18.0) || (isBold && textSizePt >= 14.0);
+        return isLarge ? RequiredRatioLargeText : RequiredRatioNormalText;
+    }
+
+    /// <summary>
     /// Inverse f(t) for LAB conversions.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -236,6 +286,7 @@ internal static class ColorUtilities
         if (H < 0) H += 360f;
         return (L, C, H);
     }
+
     /// <summary>
     /// Converts LAB to RGB.
     /// </summary>

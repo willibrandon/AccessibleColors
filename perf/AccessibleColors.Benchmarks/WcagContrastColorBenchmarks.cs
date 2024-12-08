@@ -3,40 +3,52 @@ using System.Drawing;
 
 namespace AccessibleColors.Benchmarks;
 
+/// <summary>
+/// Benchmarks for the GetContrastColor method without text size/weight considerations.
+/// </summary>
 [MemoryDiagnoser]
 public class WcagContrastColorBenchmarks
 {
-    private Color _cachedColor;
-    private Color _blackWhiteColor;
-    private Color _dynamicColor;
+    private Color _midGrayBackground;
+    private Color _darkGrayBackground;
+    private Color _mutedBlueBackground;
 
     [GlobalSetup]
     public void Setup()
     {
-        // Precompute a cached color
-        _cachedColor = Color.FromArgb(120, 120, 120); // Mid-gray
-        _blackWhiteColor = Color.FromArgb(20, 20, 20); // Dark gray
-        _dynamicColor = Color.FromArgb(100, 120, 140); // Muted blue
+        // Representative backgrounds:
+        _midGrayBackground = Color.FromArgb(120, 120, 120); // Mid-gray
+        _darkGrayBackground = Color.FromArgb(20, 20, 20);   // Dark gray
+        _mutedBlueBackground = Color.FromArgb(100, 120, 140); // Muted blue
 
-        // Warm up the cache
-        _cachedColor.GetContrastColor();
+        // Warm up:
+        _midGrayBackground.GetContrastColor();
     }
 
+    /// <summary>
+    /// Normal text scenario against a mid-gray background.
+    /// </summary>
     [Benchmark]
-    public Color GetContrastColor_CachedColor_O1WithCachingUnsafe()
+    public Color GetContrastColor_NormalText_MidGrayBg()
     {
-        return _cachedColor.GetContrastColor();
+        return _midGrayBackground.GetContrastColor();
     }
 
+    /// <summary>
+    /// Normal text scenario against a dark gray background.
+    /// </summary>
     [Benchmark]
-    public Color GetContrastColor_BlackWhiteContrast_O1WithCachingUnsafe()
+    public Color GetContrastColor_NormalText_DarkGrayBg()
     {
-        return _blackWhiteColor.GetContrastColor();
+        return _darkGrayBackground.GetContrastColor();
     }
 
+    /// <summary>
+    /// Normal text scenario against a muted blue background.
+    /// </summary>
     [Benchmark]
-    public Color GetContrastColor_DynamicContrast_O1WithCachingUnsafe()
+    public Color GetContrastColor_NormalText_MutedBlueBg()
     {
-        return _dynamicColor.GetContrastColor();
+        return _mutedBlueBackground.GetContrastColor();
     }
 }
