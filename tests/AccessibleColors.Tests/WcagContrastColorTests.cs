@@ -72,6 +72,14 @@ public class WcagContrastColorTests
     }
 
     [Fact]
+    public void GetContrastColorForUIElement_ReturnsCompliantColor()
+    {
+        var background = Color.FromArgb(50, 50, 50);
+        var uiColor = background.GetContrastColorForUIElement(); // Should meet ≥3:1 by default
+        Assert.True(WcagContrastColor.IsUIElementCompliant(background, uiColor));
+    }
+
+    [Fact]
     public void IsCompliant_BlackOnWhite_ShouldPass()
     {
         var background = Color.White;
@@ -108,6 +116,22 @@ public class WcagContrastColorTests
         var foreground = Color.Red;
         Assert.False(WcagContrastColor.IsCompliant(background, foreground),
             "Red text on white background typically fails the 4.5:1 ratio for normal text.");
+    }
+
+    [Theory]
+    [InlineData(32, 32, 32, 120, 120, 120, true)]  // Gray on dark should be around or above 3:1
+    [InlineData(255, 255, 255, 200, 200, 200, false)] // Light gray on white may fail 3:1
+    public void IsUIElementCompliant_ValidatesNonTextContrast(
+            int br, int bg, int bb,
+            int fr, int fg, int fb,
+            bool expected)
+    {
+        var background = Color.FromArgb(br, bg, bb);
+        var element = Color.FromArgb(fr, fg, fb);
+
+        bool actual = WcagContrastColor.IsUIElementCompliant(background, element);
+
+        Assert.Equal(expected, actual);
     }
 
     [Theory]
@@ -188,6 +212,15 @@ public class WcagContrastColorTests
 
         Assert.True(IsWCAGCompliant(input, contrastColor, RequiredRatio),
             $"Contrast color {contrastColor} did not meet ~4.5:1 ratio for near-threshold gray {input}.");
+    }
+
+    [Fact]
+    public void UIElementOnVeryBrightBg_StillFindsCompliantColor()
+    {
+        var background = Color.FromArgb(250, 250, 250);
+        var uiColor = background.GetContrastColorForUIElement();
+
+        Assert.True(WcagContrastColor.IsUIElementCompliant(background, uiColor));
     }
 
     /// <summary>
