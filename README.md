@@ -24,7 +24,7 @@ In addition to single contrast colors, **AccessibleColors** also offers a dynami
 
 ## Getting Started
 
-1. **Install**:
+1. **Install**: Add the library as a reference to your project. Since it's published on NuGet:
    ```bash
    dotnet add package AccessibleColors
    ```
