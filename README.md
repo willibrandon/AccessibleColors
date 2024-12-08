@@ -51,15 +51,15 @@ In addition to single contrast colors, **AccessibleColors** also offers a dynami
    using AccessibleColors;
    using System.Drawing;
 
-   var bg = Color.FromArgb(32, 32, 32); // Dark background
+   var background = Color.FromArgb(32, 32, 32); // Dark background
    double textSizePt = 18.0;  // At or above 18pt is considered large text by WCAG
    bool isBold = false;       // If it were bold and >= 14pt, it would also be treated as large text
 
    // Automatically choose a foreground color compliant for large text:
-   Color textForeground = WcagContrastColor.GetContrastColorForText(bg, textSizePt, isBold);
+   Color textForeground = background.GetContrastColorForText(textSizePt, isBold);
 
    // Check text compliance:
-   bool isTextCompliant = WcagContrastColor.IsTextCompliant(bg, textForeground, textSizePt, isBold);
+   bool isTextCompliant = WcagContrastColor.IsTextCompliant(background, textForeground, textSizePt, isBold);
 
    // textForeground now provides a readable, accessible color for large text on the given background.
    ```
@@ -68,11 +68,11 @@ In addition to single contrast colors, **AccessibleColors** also offers a dynami
    using AccessibleColors;
    using System.Drawing;
 
-   var uiBg = Color.FromArgb(240, 240, 240); // Light background
+   var uiBackground = Color.FromArgb(240, 240, 240); // Light background
 
    // Get a color that meets or exceeds the 3:1 ratio for UI elements:
-   Color uiElementColor = uiBg.GetContrastColorForUIElement(3.0);
-   bool isUIElementAccessible = WcagContrastColor.IsUIElementCompliant(uiBg, uiElementColor);
+   Color uiElementColor = uiBackground.GetContrastColorForUIElement(3.0);
+   bool isUIElementAccessible = WcagContrastColor.IsUIElementCompliant(uiBackground, uiElementColor);
 
    // Use uiElementColor for icons, focus indicators, or other graphical components 
    // to ensure they're distinguishable and accessible.
@@ -88,7 +88,7 @@ In addition to single contrast colors, **AccessibleColors** also offers a dynami
    int steps = 5;
    bool darkMode = true;
 
-   IReadOnlyList<Color> ramp = AccessibleColors.GenerateAccessibleRamp(baseAccent, steps, darkMode);
+   IReadOnlyList<Color> ramp = ColorRampGenerator.GenerateAccessibleRamp(baseAccent, steps, darkMode);
 
    // Use these ramp colors for various UI states, ensuring each remains accessible.
    ```
@@ -112,9 +112,9 @@ In addition to single contrast colors, **AccessibleColors** also offers a dynami
    myButton.DisabledColor = accessibleRamp[4];
 
    // For icons or other UI elements:
-   var bg = Color.FromArgb(32, 32, 32); 
-   var iconColor = bg.GetContrastColorForUIElement(); // Defaults to 3:1 for non-text
-   bool isAccessibleIcon = WcagContrastColor.IsUIElementCompliant(bg, iconColor);
+   var background = Color.FromArgb(32, 32, 32); 
+   var iconColor = background.GetContrastColorForUIElement(); // Defaults to 3:1 for non-text
+   bool isAccessibleIcon = WcagContrastColor.IsUIElementCompliant(background, iconColor);
 
    // Ensure the icon remains readable and accessible:
    myIcon.ForeColor = iconColor;
@@ -122,7 +122,7 @@ In addition to single contrast colors, **AccessibleColors** also offers a dynami
    // For text with size/weight considerations:
    double textSizePt = 18.0;
    bool isBold = true;
-   var textColor = WcagContrastColor.GetContrastColorForText(myButton.NormalColor, textSizePt, isBold);
+   var textColor = myButton.NormalColor.GetContrastColorForText(textSizePt, isBold);
    bool isTextAccessible = WcagContrastColor.IsTextCompliant(myButton.NormalColor, textColor, textSizePt, isBold);
 
    // Ensure the text remains readable and accessible:
@@ -160,7 +160,7 @@ Console.WriteLine($"UI Element Foreground: {uiElementColor}, Is UI compliant: {i
 
 // Ramp Example:
 var brandAccent = Color.FromArgb(50, 50, 50);
-var rampColors = AccessibleColors.GenerateAccessibleRamp(brandAccent, 5, darkMode: false);
+var rampColors = ColorRampGenerator.GenerateAccessibleRamp(brandAccent, 5, darkMode: false);
 foreach (var c in rampColors)
 {
     Console.WriteLine($"Ramp color: {c}, Compliant: {WcagContrastColor.IsCompliant(Color.White, c)}");
