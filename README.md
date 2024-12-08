@@ -24,12 +24,12 @@ In addition to single contrast colors, **AccessibleColors** also offers a dynami
 
 ## Getting Started
 
-1. Install:
+1. **Install**:
    ```bash
    dotnet add package AccessibleColors
    ```
 
-2. Use for Single Contrast Colors:
+2. **Use for Single Contrast Colors**:
    ```csharp
    using AccessibleColors;
    using System.Drawing;
@@ -44,7 +44,7 @@ In addition to single contrast colors, **AccessibleColors** also offers a dynami
    bool isAccessible = WcagContrastColor.IsCompliant(background, foreground);
    ```
 
-3. Handling Text of Different Sizes and Weights:
+3. **Handling Text of Different Sizes and Weights**:
    ```csharp
    using AccessibleColors;
    using System.Drawing;
@@ -62,7 +62,7 @@ In addition to single contrast colors, **AccessibleColors** also offers a dynami
    // textForeground now provides a readable, accessible color for large text on the given background.
    ```
 
-4. Generate Accessible Color Ramps:
+4. **Generate Accessible Color Ramps**:
    ```csharp
    using AccessibleColors;
    using System.Drawing;
@@ -78,7 +78,7 @@ In addition to single contrast colors, **AccessibleColors** also offers a dynami
     // Use them for various UI states or theme elements.
    ```
 
-5. Integrate Into Your UI:
+5. **Integrate Into Your UI**:
 
     Use `etContrastColor` and `GenerateAccessibleRamp` anywhere you need accessible colors dynamically, custom themes, responsive adjustments, or design tools.
 
