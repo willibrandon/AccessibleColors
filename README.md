@@ -21,7 +21,7 @@ In addition to single contrast colors, **AccessibleColors** also offers a dynami
 
 ## Getting Started
 
-1. **Install**: Add the library as a reference to your project:
+1. **Install**: Add the library as a reference to your project. Since it's published on NuGet:
    ```bash
    dotnet add package AccessibleColors
    ```
@@ -40,7 +40,7 @@ In addition to single contrast colors, **AccessibleColors** also offers a dynami
    // Check compliance explicitly if needed:
    bool isAccessible = WcagContrastColor.IsCompliant(background, foreground);
    ```
-
+   
 3. **Generate Accessible Color Ramps**:
    ```csharp
    using System.Drawing;
