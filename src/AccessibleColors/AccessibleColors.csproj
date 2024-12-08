@@ -9,7 +9,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<Version>1.0.6</Version>
+		<Version>1.0.7</Version>
 		<Authors>willibrandon</Authors>
 		<Description>Provides O(1) methods for computing WCAG 2.2-compliant contrast colors, instantly delivering accessible foreground colors for any given background. Ensures a default 4.5:1 contrast ratio for inclusive, accessible user interfaces.</Description>
 		<IncludeSymbols>True</IncludeSymbols>
