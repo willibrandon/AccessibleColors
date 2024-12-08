@@ -61,6 +61,19 @@ public static class WcagContrastColor
     }
 
     /// <summary>
+    /// Returns a WCAG-compliant foreground color for UI elements (non-text) given a background color.
+    /// Non-text elements often need at least 3:1 contrast ratio to be distinguishable.
+    /// </summary>
+    /// <param name="background">The background color.</param>
+    /// <param name="requiredRatio">The required ratio for non-text elements, defaults to 3.0.</param>
+    /// <returns>A color that meets or exceeds the specified ratio for non-text UI elements.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Color GetContrastColorForUIElement(this Color background, double requiredRatio = ColorUtilities.RequiredRatioUIElement)
+    {
+        return ColorUtilities.GetContrastColorWithRatio(background, requiredRatio);
+    }
+
+    /// <summary>
     /// Determines whether the specified foreground and background color combination meets a given WCAG contrast ratio requirement.
     /// By default, it checks against the normal text standard (4.5:1).
     /// </summary>
@@ -100,5 +113,22 @@ public static class WcagContrastColor
     {
         double required = ColorUtilities.GetRequiredRatioForText(textSizePt, isBold);
         return IsCompliant(background, foreground, required);
+    }
+
+    /// <summary>
+    /// Determines if a UI element or graphical object meets the WCAG contrast recommendation
+    /// (usually at least 3:1) against the specified background.
+    /// Useful for icons, focus indicators, or essential UI boundaries.
+    /// </summary>
+    /// <param name="background">The background color.</param>
+    /// <param name="elementColor">The UI element (foreground) color.</param>
+    /// <param name="requiredRatio">
+    /// The required WCAG ratio for non-text elements. Defaults to 3.0.
+    /// </param>
+    /// <returns>True if compliant, false otherwise.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsUIElementCompliant(Color background, Color elementColor, double requiredRatio = ColorUtilities.RequiredRatioUIElement)
+    {
+        return IsCompliant(background, elementColor, requiredRatio);
     }
 }

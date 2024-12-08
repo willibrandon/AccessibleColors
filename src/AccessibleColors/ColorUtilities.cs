@@ -12,14 +12,14 @@ internal static class ColorUtilities
 {
     internal const double RequiredRatioNormalText = 4.5;
     internal const double RequiredRatioLargeText = 3.0;
+    internal const double RequiredRatioUIElement = 3.0;
 
     private const float Xn = 0.95047f;
     private const float Yn = 1.00000f;
     private const float Zn = 1.08883f;
 
-    // Precompute LUT for sRGB -> linear once (from WcagContrastColor logic)
+    // Precompute LUT for sRGB -> linear once
     private static readonly float[] sRGBToLinear;
-    private static readonly IntPtr sRGBToLinearPtr;
 
     static ColorUtilities()
     {
@@ -28,14 +28,6 @@ internal static class ColorUtilities
         {
             float v = i / 255f;
             sRGBToLinear[i] = NormalizeSrgbComponent(v);
-        }
-
-        unsafe
-        {
-            fixed (float* p = sRGBToLinear)
-            {
-                sRGBToLinearPtr = (IntPtr)p;
-            }
         }
     }
 
@@ -229,14 +221,11 @@ internal static class ColorUtilities
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static float GetLuminance(Color c)
     {
-        unsafe
-        {
-            float* lut = (float*)sRGBToLinearPtr;
-            float r = lut[c.R];
-            float g = lut[c.G];
-            float b = lut[c.B];
-            return 0.2126f * r + 0.7152f * g + 0.0722f * b;
-        }
+        // Directly access the sRGBToLinear array:
+        float r = sRGBToLinear[c.R];
+        float g = sRGBToLinear[c.G];
+        float b = sRGBToLinear[c.B];
+        return 0.2126f * r + 0.7152f * g + 0.0722f * b;
     }
 
     /// <summary>
