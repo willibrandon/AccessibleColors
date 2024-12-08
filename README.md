@@ -117,6 +117,8 @@ In addition to single contrast colors, **AccessibleColors** also offers a dynami
    myButton.TextColor = textColor;
    ```
 
+   By leveraging `GenerateAccessibleRamp`, `GetContrastColor`, `GetContrastColorForText`, and `IsTextCompliant`, you ensure that every UI element—whether a button state, icon, or text—remains accessible, readable, and adheres to WCAG guidelines, even as themes or background colors evolve.
+
 ## Example
 
 ```csharp
