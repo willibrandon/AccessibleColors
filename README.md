@@ -5,131 +5,118 @@
 [![Build](https://github.com/willibrandon/AccessibleColors/actions/workflows/ci.yml/badge.svg)](https://github.com/willibrandon/AccessibleColors/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-**AccessibleColors** is a lightweight C# library that provides O(1) methods to compute WCAG-compliant contrast colors for foreground text, icons, and other UI elements given a background color. It instantly returns a suitable foreground color that meets or exceeds the standard WCAG 2.2 contrast ratio of 4.5:1 for normal text, or 3:1 for larger text or UI components.
+**AccessibleColors** is a lightweight C# library that helps you ensure that your application's colors meet the WCAG 2.2 contrast ratios. It instantly determines a suitable, compliant foreground color for any given background color and provides tools to verify and generate accessible color palettes.
 
-In addition to single contrast colors, **AccessibleColors** also offers a dynamic color ramp generator to produce a sequence ("ramp") of colors all meeting WCAG standards against a given background. This is especially useful for UI states (hover, pressed, disabled) or theming scenarios where you need multiple related accessible colors derived from a single base color.
+Key functionalities include:
+
+- **Instant WCAG-Compliant Foregrounds**: Quickly get a foreground color that achieves at least a 4.5:1 contrast on normal text, or 3:1 for large text/UI elements.
+- **Accessible Color Ramps**: Generate a sequence of related, contrast-compliant colors ("ramps") derived from a single base color. These ramps are useful for theming states (hover, pressed, disabled) or for ensuring multiple UI components share a visual theme while remaining accessible.
+
+## Why AccessibleColors?
+
+Ensuring accessibility compliance can be tedious. AccessibleColors automates contrast checking and selection, saving you from guesswork and manual tweaking. Whether you're implementing dark mode, creating brand-consistent themes, or just need to verify WCAG compliance, this library provides a straightforward, dependency-free solution.
 
 ## Key Features
 
-- **WCAG Compliance**: Ensures at least a 4.5:1 contrast ratio by default for normal text, and supports the 3:1 ratio for large text or UI elements, helping you create accessible user interfaces.
-- **O(1) Performance (Single Contrast Calculation)**: Uses a precomputed lookup table (LUT) for sRGB-to-linear conversions, allowing instant single-color calculations.
-- **Dynamic Accessible Ramps**: Generate a sequence of WCAG-compliant colors from a single base color. The algorithm uses minimal searching and a few small adjustments to ensure compliance for every color in the ramp.
-- **No External Dependencies**: Relies only on `System.Drawing` types for colors, making integration straightforward.
+- **WCAG Compliance**: Guarantees at least a 4.5:1 contrast ratio for normal text and supports 3:1 for large text/UI elements.
+- **O(1) Single-Color Calculations**: Uses a precomputed LUT for sRGB-to-linear conversions, ensuring instant performance for single-color queries.
+- **Accessible Ramps for Theming**:
+  - **GenerateAccessibleRamp**: Produces a series of related colors (a "ramp") that remain accessible against a chosen background (dark or light).
+  - **Already-Compliant Base Colors**: If the base color already meets WCAG standards, no adjustments are needed, resulting in little or no visible changes.
+  - **Non-Compliant Base Colors**: If the base color is not compliant, each step is adjusted to ensure compliance, producing a clear gradient of accessible shades.
+- **No External Dependencies**: Works directly with `System.Drawing`.
 - **Simple API**:
-  - `GetContrastColor`: Instantly find a compliant foreground color for a given background.
-  - `IsCompliant`: Verify if a given foreground/background pair meets a required ratio.
-  - `GetContrastColorForText`: Consider text size and boldness to automatically choose a foreground color that meets large text or normal text WCAG rules.
-  - `IsTextCompliant`: Check if a given pair is compliant under WCAG rules for both normal and large/bold text conditions.
-  - `GetContrastColorForUIElement`: Obtain a compliant color for non-text UI elements (icons, focus rings, shapes) that often require a 3:1 ratio.
-  - `IsUIElementCompliant`: Verify if a UI element's foreground color meets the WCAG non-text contrast guideline.
-  - `GenerateAccessibleRamp`: Produce an entire ramp of related colors that remain accessible.
+  - **`GetContrastColor`**: Instantly find a compliant foreground color for a given background.
+  - **`IsCompliant`**: Check if a given foreground and background pair meets the required WCAG ratio.
+  - **`GetContrastColorForText`**: Choose a compliant text color based on text size and weight (large/bold rules).
+  - **`IsTextCompliant`**: Verify whether a text foreground/background pair meets the WCAG text contrast criteria.
+  - **`GetContrastColorForUIElement`**: Obtain a compliant color for non-text UI elements, meeting the 3:1 contrast guideline.
+  - **`IsUIElementCompliant`**: Check if a UI element's foreground meets the WCAG non-text contrast ratio.
+  - **`GenerateAccessibleRamp`**: Produces a series of accessible colors from a single base color.
 
 ## Getting Started
 
-1. **Install**:
-   ```bash
-   dotnet add package AccessibleColors
-   ```
+### Installation
 
-2. **Single Contrast Colors**:
-   ```csharp
-   using AccessibleColors;
-   using System.Drawing;
+```bash
+dotnet add package AccessibleColors
+```
 
-   // Suppose you have a background color:
-   var background = Color.FromArgb(255, 0, 0); // Bright red
+### Single Contrast Colors
 
-   // Get a compliant foreground color:
-   Color foreground = background.GetContrastColor();
-   
-   // Check compliance explicitly if needed:
-   bool isAccessible = WcagContrastColor.IsCompliant(background, foreground);
-   ```
+```csharp
+using AccessibleColors;
+using System.Drawing;
 
-3. **Handling Text of Different Sizes and Weights**:
-   ```csharp
-   using AccessibleColors;
-   using System.Drawing;
+var background = Color.FromArgb(255, 0, 0); // Bright red background
+Color foreground = background.GetContrastColor(); // Instantly get a compliant foreground
 
-   var background = Color.FromArgb(32, 32, 32); // Dark background
-   double textSizePt = 18.0;  // At or above 18pt is considered large text by WCAG
-   bool isBold = false;       // If it were bold and >= 14pt, it would also be treated as large text
+bool isAccessible = WcagContrastColor.IsCompliant(background, foreground);
+```
 
-   // Automatically choose a foreground color compliant for large text:
-   Color textForeground = background.GetContrastColorForText(textSizePt, isBold);
+### Handling Different Text Sizes/Weights
 
-   // Check text compliance:
-   bool isTextCompliant = WcagContrastColor.IsTextCompliant(background, textForeground, textSizePt, isBold);
+```csharp
+var background = Color.FromArgb(32, 32, 32); 
+double textSizePt = 18.0; // Large text threshold
+bool isBold = false;
 
-   // textForeground now provides a readable, accessible color for large text on the given background.
-   ```
-4. **UI Elements (Non-Text) Contrast**:
-   ```csharp
-   using AccessibleColors;
-   using System.Drawing;
+Color textForeground = background.GetContrastColorForText(textSizePt, isBold);
+bool isTextCompliant = WcagContrastColor.IsTextCompliant(background, textForeground, textSizePt, isBold);
+```
 
-   var uiBackground = Color.FromArgb(240, 240, 240); // Light background
+### UI Elements (Non-Text) Contrast
 
-   // Get a color that meets or exceeds the 3:1 ratio for UI elements:
-   Color uiElementColor = uiBackground.GetContrastColorForUIElement(3.0);
-   bool isUIElementAccessible = WcagContrastColor.IsUIElementCompliant(uiBackground, uiElementColor);
+```csharp
+var uiBackground = Color.FromArgb(240, 240, 240);
+Color uiElementColor = uiBackground.GetContrastColorForUIElement(); // 3:1 ratio by default
+bool isUIElementAccessible = WcagContrastColor.IsUIElementCompliant(uiBackground, uiElementColor);
+```
 
-   // Use uiElementColor for icons, focus indicators, or other graphical components 
-   // to ensure they're distinguishable and accessible.
-   ```
+### Generate Accessible Color Ramps
 
-5. **Generate Accessible Color Ramps**:
-   ```csharp
-   using AccessibleColors;
-   using System.Drawing;
-   
-   // Generate a 5-step ramp suitable for dark mode UI:
-   Color baseAccent = Color.FromArgb(0, 120, 215); // Your brand accent
-   int steps = 5;
-   bool darkMode = true;
+```csharp
+// Example: Generating a 5-step ramp for a dark mode UI.
+// When darkMode = true, the ramp is optimized for accessibility against a dark background.
+// By default, the ramp generator considers Color.FromArgb(32, 32, 32) as the reference dark background.
 
-   IReadOnlyList<Color> ramp = ColorRampGenerator.GenerateAccessibleRamp(baseAccent, steps, darkMode);
+Color baseAccent = Color.FromArgb(0, 120, 215);
+int steps = 5;
+bool darkMode = true;
 
-   // Use these ramp colors for various UI states, ensuring each remains accessible.
-   ```
+IReadOnlyList<Color> ramp = ColorRampGenerator.GenerateAccessibleRamp(baseAccent, steps, darkMode);
 
-5. **Integrating Into Your UI**:
+// Verify compliance against the intended dark background:
+Color darkBackground = Color.FromArgb(32, 32, 32);
+foreach (var c in ramp)
+{
+    bool isCompliant = WcagContrastColor.IsCompliant(darkBackground, c);
+    Console.WriteLine($"Ramp color: {c}, Compliant (dark bg): {isCompliant}");
+}
 
-    For example:
-   ```csharp
-   // Suppose you want to theme your app's buttons for dark mode.
-   var baseAccent = Color.FromArgb(0, 120, 215);
-   bool darkMode = true;
-   int steps = 5;
+// Use these ramp colors for various states in your UI:
+myButton.NormalColor = ramp[0];
+myButton.HoverColor = ramp[1];
+myButton.PressedColor = ramp[2];
+myButton.FocusColor = ramp[3];
+myButton.DisabledColor = ramp[4];
+```
 
-   IReadOnlyList<Color> accessibleRamp = AccessibleColors.GenerateAccessibleRamp(baseAccent, steps, darkMode);
+**Important Note About Ramps**:  
+If your base color is already compliant, the ramp may show little variation since no adjustments are needed. To see a noticeable gradient, start from a non-compliant color (e.g., a light gray on white). The ramp generator will then adjust each step to ensure accessibility, creating a visually distinct gradient.
 
-   // Assign ramp colors to different states of a custom button:
-   myButton.NormalColor = accessibleRamp[0];
-   myButton.HoverColor = accessibleRamp[1];
-   myButton.PressedColor = accessibleRamp[2];
-   myButton.FocusColor = accessibleRamp[3];
-   myButton.DisabledColor = accessibleRamp[4];
+For example:
 
-   // For icons or other UI elements:
-   var background = Color.FromArgb(32, 32, 32); 
-   var iconColor = background.GetContrastColorForUIElement(); // Defaults to 3:1 for non-text
-   bool isAccessibleIcon = WcagContrastColor.IsUIElementCompliant(background, iconColor);
+```csharp
+var startColor = Color.FromArgb(170,170,170); // Non-compliant on white
+var rampColors = ColorRampGenerator.GenerateAccessibleRamp(startColor, 5, darkMode: false);
+foreach (var c in rampColors)
+{
+    Console.WriteLine($"Ramp color: {c}, Compliant: {WcagContrastColor.IsCompliant(Color.White, c)}");
+}
+```
 
-   // Ensure the icon remains readable and accessible:
-   myIcon.ForeColor = iconColor;
-
-   // For text with size/weight considerations:
-   double textSizePt = 18.0;
-   bool isBold = true;
-   var textColor = myButton.NormalColor.GetContrastColorForText(textSizePt, isBold);
-   bool isTextAccessible = WcagContrastColor.IsTextCompliant(myButton.NormalColor, textColor, textSizePt, isBold);
-
-   // Ensure the text remains readable and accessible:
-   myButton.TextColor = textColor;
-   ```
-
-   By leveraging all these methods, you can ensure that every UI element, text, icons, focus indicators, stateful ramps, remains readable, accessible, and fully WCAG-compliant as themes or background colors evolve.
+Here, you'll see a clear transition from lighter to darker, all accessible against white.
 
 ## Example
 
@@ -140,40 +127,47 @@ using System.Drawing;
 // Single Contrast Example:
 var bg = Color.FromArgb(128,128,128); // Mid-gray background
 var fg = bg.GetContrastColor();
-Console.WriteLine($"Foreground: {fg}");
-bool compliant = WcagContrastColor.IsCompliant(bg, fg);
-Console.WriteLine($"Is compliant: {compliant}");
+Console.WriteLine($"Foreground: {fg} - Compliant: {WcagContrastColor.IsCompliant(bg, fg)}");
 
-// Text Compliance Example:
+// Text Compliance Example (18pt large text on dark bg):
 var textBg = Color.FromArgb(32,32,32);
-var textSize = 18.0;
-var bold = true;
-var textFg = WcagContrastColor.GetContrastColorForText(textBg, textSize, bold);
-bool isTextCompliant = WcagContrastColor.IsTextCompliant(textBg, textFg, textSize, bold);
-Console.WriteLine($"Text Foreground: {textFg}, Is text compliant: {isTextCompliant}");
+double textSize = 18.0;
+bool bold = true;
+var textFg = textBg.GetContrastColorForText(textSize, bold);
+Console.WriteLine($"Text Foreground: {textFg}, Compliant: {WcagContrastColor.IsTextCompliant(textBg, textFg, textSize, bold)}");
 
 // UI Element Compliance Example:
 var uiBg = Color.FromArgb(240, 240, 240);
-var uiElementColor = uiBg.GetContrastColorForUIElement(); // 3:1 by default
-bool isUIElementAccessible = WcagContrastColor.IsUIElementCompliant(uiBg, uiElementColor);
-Console.WriteLine($"UI Element Foreground: {uiElementColor}, Is UI compliant: {isUIElementAccessible}");
+var uiElementColor = uiBg.GetContrastColorForUIElement();
+Console.WriteLine($"UI Element Foreground: {uiElementColor}, Compliant: {WcagContrastColor.IsUIElementCompliant(uiBg, uiElementColor)}");
 
-// Ramp Example:
-var brandAccent = Color.FromArgb(50, 50, 50);
-var rampColors = ColorRampGenerator.GenerateAccessibleRamp(brandAccent, 5, darkMode: false);
-foreach (var c in rampColors)
+// Ramp Example (compliance-driven adjustments with dark mode):
+// Here we generate a ramp for a dark background scenario.
+// The ramp will be tuned to be accessible on a dark background (e.g., Color.FromArgb(32, 32, 32)).
+Color baseAccent = Color.FromArgb(0, 120, 215);
+int steps = 5;
+bool darkMode = true;
+
+// This creates a 5-step ramp accessible against a dark background.
+IReadOnlyList<Color> ramp = ColorRampGenerator.GenerateAccessibleRamp(baseAccent, steps, darkMode);
+
+// Since darkMode = true, the intended background is a dark color:
+Color darkBackground = Color.FromArgb(32, 32, 32);
+
+foreach (var c in ramp)
 {
-    Console.WriteLine($"Ramp color: {c}, Compliant: {WcagContrastColor.IsCompliant(Color.White, c)}");
+    bool isCompliant = WcagContrastColor.IsCompliant(darkBackground, c);
+    Console.WriteLine($"Ramp color: {c}, Compliant with dark background: {isCompliant}");
 }
 ```
 
 ## Why This Matters
 
-Accessibility is essential for building inclusive applications. Ensuring proper contrast ratios improves readability and usability for everyone. **AccessibleColors** automates these standards for both text and non-text UI elements, allowing you to quickly achieve compliance with WCAG guidelines without manual guesswork.
+Accessibility is a cornerstone of inclusive design. Ensuring that text, icons, focus indicators, and other UI elements are distinguishable to everyone improves overall usability. **AccessibleColors** makes it simple to maintain WCAG compliance across your entire UI-no guesswork required.
 
 ## Contributing
 
-Contributions are welcome! Feel free to open issues, suggest features, or submit pull requests.
+Contributions are welcome! Please open issues, suggest features, or submit pull requests to help improve this library.
 
 ## License
 
