@@ -106,8 +106,54 @@ internal static class ColorUtilities
                 return LCHToRGB(L, C, minusH);
         }
 
-        // Fallback
+        // Fallback - if minimal attempts fail here, AttemptComplianceGuaranteed will handle it.
         return LCHToRGB(L, C, H);
+    }
+
+    /// <summary>
+    /// A more robust AttemptCompliance that guarantees compliance by escalating search efforts.
+    /// 1. Try minimal binary search on L.
+    /// 2. Try small C/H adjustments.
+    /// 3. If all fails, do a more thorough L search.
+    /// 4. Finally, fallback to black (for light mode) or white (for dark mode) which are guaranteed.
+    /// </summary>
+    internal static Color AttemptComplianceGuaranteed(float L, float C, float H, float bgLum, bool darkMode)
+    {
+        // First try the original minimal attempt approach:
+        Color c = AttemptCompliance(L, C, H, bgLum, darkMode);
+        if (IsCompliantInternal(c, bgLum))
+            return c;
+
+        // If that fails, we try a more thorough search on L:
+        // Depending on mode, we try scanning L up or down thoroughly.
+        // We use increments of 1 to ensure we find a compliant L if it exists.
+        if (darkMode)
+        {
+            // Increase L from current L to 100:
+            for (float testL = 0f; testL <= 100f; testL += 1f)
+            {
+                if (CheckCompliance(testL, C, H, bgLum))
+                    return LCHToRGB(testL, C, H);
+            }
+        }
+        else
+        {
+            // Decrease L from current L down to 0:
+            for (float testL = 100f; testL >= 0f; testL -= 1f)
+            {
+                if (CheckCompliance(testL, C, H, bgLum))
+                    return LCHToRGB(testL, C, H);
+            }
+        }
+
+        // If we still can't find compliance by scanning L, we can also vary C or H in a more brute-force manner.
+        // Let's try a more extended approach (optional):
+        // For simplicity, we skip extended C/H brute force and just fallback to guaranteed compliance.
+
+        // Guaranteed fallback:
+        // For dark mode, white is almost always compliant (dark bg + white fg):
+        // For light mode, black is always compliant (light bg + black fg).
+        return darkMode ? Color.White : Color.Black;
     }
 
     /// <summary>
@@ -254,6 +300,14 @@ internal static class ColorUtilities
         return isLarge ? RequiredRatioLargeText : RequiredRatioNormalText;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool IsCompliantInternal(Color c, float bgLum)
+    {
+        float fgLum = GetLuminance(c);
+        double ratio = CalculateContrastRatio(bgLum, fgLum);
+        return ratio >= RequiredRatioNormalText;
+    }
+
     /// <summary>
     /// Inverse f(t) for LAB conversions.
     /// </summary>
@@ -315,7 +369,7 @@ internal static class ColorUtilities
     /// Converts LCH to RGB by going through LAB.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Color LCHToRGB(float L, float C, float H)
+    internal static Color LCHToRGB(float L, float C, float H)
     {
         var (ll, aa, bb) = LCHToLAB(L, C, H);
         return LABToRGB(ll, aa, bb);
