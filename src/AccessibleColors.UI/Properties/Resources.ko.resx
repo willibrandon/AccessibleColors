@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+
+  <data name="MainForm_Title" xml:space="preserve">
+    <value>접근성 색상 도구</value>
+  </data>
+  <data name="Heading_Text" xml:space="preserve">
+    <value>AccessibleColors: WCAG 준수 대비 색상</value>
+  </data>
+  <data name="Explanation_Heading" xml:space="preserve">
+    <value>설명</value>
+  </data>
+  <data name="Explanation_Body" xml:space="preserve">
+    <value>RGB 16진수 형식으로 전경색과 배경색을 입력하거나 색상 선택기를 사용하여 색상을 선택하십시오. 밝기 슬라이더를 사용하여 색상의 인지적 밝기를 조정할 수 있습니다.
+
+WCAG 2.0 AA 수준은 일반 텍스트에 대해 최소 4.5:1의 대비 비율, 큰 텍스트에 대해 최소 3:1을 요구합니다. WCAG 2.1은 그래픽 및 UI 구성 요소에 대해 최소 3:1의 대비 비율을 요구합니다. WCAG AAA 수준은 일반 텍스트에 대해 최소 7:1, 큰 텍스트에 대해 최소 4.5:1의 대비 비율을 요구합니다.
+
+"큰 텍스트"는 14포인트(약 18.66px) 이상 굵은 텍스트 또는 18포인트(약 24px) 이상을 의미합니다.</value>
+  </data>
+
+  <data name="ForegroundColor_Label" xml:space="preserve">
+    <value>색상 (&#35;RRGGBB):</value>
+  </data>
+  <data name="BackgroundColor_Label" xml:space="preserve">
+    <value>색상 (&#35;RRGGBB):</value>
+  </data>
+  <data name="Alpha_Label" xml:space="preserve">
+    <value>알파 (0-255):</value>
+  </data>
+  <data name="Lightness_Label" xml:space="preserve">
+    <value>명도:</value>
+  </data>
+  <data name="TextSize_Label" xml:space="preserve">
+    <value>텍스트 크기 (pt):</value>
+  </data>
+  <data name="SampleText_Label" xml:space="preserve">
+    <value>샘플 텍스트:</value>
+  </data>
+  <data name="Bold_Checkbox" xml:space="preserve">
+    <value>굵게</value>
+  </data>
+  <data name="ColorPicker_Button" xml:space="preserve">
+    <value>색상 선택기</value>
+  </data>
+  <data name="EyeDropper_Button" xml:space="preserve">
+    <value>스포이트</value>
+  </data>
+  <data name="SavePalette_Button" xml:space="preserve">
+    <value>팔레트 저장</value>
+  </data>
+  <data name="LoadPalette_Button" xml:space="preserve">
+    <value>팔레트 로드</value>
+  </data>
+  <data name="LoadPalette_DialogTitle" xml:space="preserve">
+    <value>팔레트 로드</value>
+  </data>
+  <data name="SavePalette_DialogTitle" xml:space="preserve">
+    <value>팔레트 저장</value>
+  </data>
+  <data name="ContrastRatio_Format" xml:space="preserve">
+    <value>명암비: {0:F2}:1</value>
+  </data>
+  <data name="Compliance_Compliant" xml:space="preserve">
+    <value>지정된 텍스트 크기/굵기에 대해 WCAG AA 준수</value>
+  </data>
+  <data name="Compliance_NotCompliant" xml:space="preserve">
+    <value>비준수</value>
+  </data>
+  <data name="ContrastRatio_InvalidInput" xml:space="preserve">
+    <value>잘못된 입력</value>
+  </data>
+
+  <data name="Tooltip_ForegroundColor" xml:space="preserve">
+    <value>&#35;RRGGBB 형식으로 전경색을 입력하십시오.</value>
+  </data>
+  <data name="Tooltip_ForegroundPicker" xml:space="preserve">
+    <value>전경색을 선택하기 위해 색상 선택기 대화 상자를 엽니다.</value>
+  </data>
+  <data name="Tooltip_ForegroundEyedropper" xml:space="preserve">
+    <value>화면 어디에서나 색상을 선택하기 위해 스포이트를 사용하십시오.</value>
+  </data>
+  <data name="Tooltip_Alpha" xml:space="preserve">
+    <value>색상의 투명도(0-255)를 조정하십시오.</value>
+  </data>
+  <data name="Tooltip_ForegroundLightness" xml:space="preserve">
+    <value>전경색의 인지적 밝기를 조정하십시오.</value>
+  </data>
+
+  <data name="Tooltip_BackgroundColor" xml:space="preserve">
+    <value>&#35;RRGGBB 형식으로 배경색을 입력하십시오.</value>
+  </data>
+  <data name="Tooltip_BackgroundPicker" xml:space="preserve">
+    <value>배경색을 선택하기 위해 색상 선택기 대화 상자를 엽니다.</value>
+  </data>
+  <data name="Tooltip_BackgroundEyedropper" xml:space="preserve">
+    <value>화면에서 배경색을 선택하기 위해 스포이트를 사용하십시오.</value>
+  </data>
+  <data name="Tooltip_BackgroundLightness" xml:space="preserve">
+    <value>배경색의 인지적 밝기를 조정하십시오.</value>
+  </data>
+
+  <data name="Tooltip_TextSize" xml:space="preserve">
+    <value>텍스트 크기를 포인트 단위로 설정하십시오. 큰 텍스트는 대비 요구사항이 덜 엄격합니다.</value>
+  </data>
+  <data name="Tooltip_Bold" xml:space="preserve">
+    <value>텍스트가 굵은 경우 체크하십시오. 굵게≥14pt는 큰 텍스트로 간주합니다.</value>
+  </data>
+  <data name="Tooltip_SampleText" xml:space="preserve">
+    <value>미리보기를 위해 사용자 정의 샘플 텍스트를 입력하십시오.</value>
+  </data>
+
+  <data name="Tooltip_SavePalette" xml:space="preserve">
+    <value>현재 색상, 텍스트 설정 및 샘플 텍스트를 JSON 파일로 저장하십시오.</value>
+  </data>
+  <data name="Tooltip_LoadPalette" xml:space="preserve">
+    <value>이전에 저장한 팔레트 설정을 JSON 파일에서 로드하십시오.</value>
+  </data>
+</root>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+
+  <data name="MainForm_Title" xml:space="preserve">
+    <value>Barrierefreies Farbwerkzeug</value>
+  </data>
+  <data name="Heading_Text" xml:space="preserve">
+    <value>AccessibleColors: WCAG-konforme Kontrastfarben</value>
+  </data>
+  <data name="Explanation_Heading" xml:space="preserve">
+    <value>Erläuterung</value>
+  </data>
+  <data name="Explanation_Body" xml:space="preserve">
+    <value>Geben Sie eine Vorder- und Hintergrundfarbe im RGB-Hexadezimalformat ein oder wählen Sie eine Farbe mit dem Farbwähler. Verwenden Sie den Helligkeitsregler, um die wahrgenommene Helligkeit der Farbe anzupassen.
+
+WCAG 2.0 Level AA erfordert ein Kontrastverhältnis von mindestens 4,5:1 für normalen Text und 3:1 für großen Text. WCAG 2.1 erfordert ein Kontrastverhältnis von mindestens 3:1 für Grafiken und UI-Komponenten. WCAG Level AAA erfordert ein Kontrastverhältnis von mindestens 7:1 für normalen Text und 4,5:1 für großen Text.
+
+Großer Text ist definiert als 14 Punkt (ca. 18,66px) fett oder größer, oder 18 Punkt (ca. 24px) oder größer.</value>
+  </data>
+
+  <data name="ForegroundColor_Label" xml:space="preserve">
+    <value>Farbe (&#35;RRGGBB):</value>
+  </data>
+  <data name="BackgroundColor_Label" xml:space="preserve">
+    <value>Farbe (&#35;RRGGBB):</value>
+  </data>
+  <data name="Alpha_Label" xml:space="preserve">
+    <value>Alpha (0-255):</value>
+  </data>
+  <data name="Lightness_Label" xml:space="preserve">
+    <value>Helligkeit:</value>
+  </data>
+  <data name="TextSize_Label" xml:space="preserve">
+    <value>Textgröße (pt):</value>
+  </data>
+  <data name="SampleText_Label" xml:space="preserve">
+    <value>Beispieltext:</value>
+  </data>
+  <data name="Bold_Checkbox" xml:space="preserve">
+    <value>Fett</value>
+  </data>
+  <data name="ColorPicker_Button" xml:space="preserve">
+    <value>Farbwähler</value>
+  </data>
+  <data name="EyeDropper_Button" xml:space="preserve">
+    <value>Farbpipette</value>
+  </data>
+  <data name="SavePalette_Button" xml:space="preserve">
+    <value>Palette speichern</value>
+  </data>
+  <data name="LoadPalette_Button" xml:space="preserve">
+    <value>Palette laden</value>
+  </data>
+  <data name="LoadPalette_DialogTitle" xml:space="preserve">
+    <value>Palette laden</value>
+  </data>
+  <data name="SavePalette_DialogTitle" xml:space="preserve">
+    <value>Palette speichern</value>
+  </data>
+  <data name="ContrastRatio_Format" xml:space="preserve">
+    <value>Kontrastverhältnis: {0:F2}:1</value>
+  </data>
+  <data name="Compliance_Compliant" xml:space="preserve">
+    <value>WCAG AA konform für die angegebene Textgröße/Gewicht</value>
+  </data>
+  <data name="Compliance_NotCompliant" xml:space="preserve">
+    <value>Nicht konform</value>
+  </data>
+  <data name="ContrastRatio_InvalidInput" xml:space="preserve">
+    <value>Ungültige Eingabe</value>
+  </data>
+
+  <data name="Tooltip_ForegroundColor" xml:space="preserve">
+    <value>Geben Sie die Vordergrundfarbe im Format &#35;RRGGBB ein.</value>
+  </data>
+  <data name="Tooltip_ForegroundPicker" xml:space="preserve">
+    <value>Öffnen Sie einen Farbwähler, um die Vordergrundfarbe auszuwählen.</value>
+  </data>
+  <data name="Tooltip_ForegroundEyedropper" xml:space="preserve">
+    <value>Verwenden Sie die Pipette, um eine Farbe von Ihrem Bildschirm auszuwählen.</value>
+  </data>
+  <data name="Tooltip_Alpha" xml:space="preserve">
+    <value>Stellen Sie die Transparenz (0-255) der Farbe ein.</value>
+  </data>
+  <data name="Tooltip_ForegroundLightness" xml:space="preserve">
+    <value>Stellen Sie die wahrgenommene Helligkeit der Vordergrundfarbe ein.</value>
+  </data>
+
+  <data name="Tooltip_BackgroundColor" xml:space="preserve">
+    <value>Geben Sie die Hintergrundfarbe im Format &#35;RRGGBB ein.</value>
+  </data>
+  <data name="Tooltip_BackgroundPicker" xml:space="preserve">
+    <value>Öffnen Sie einen Farbwähler, um die Hintergrundfarbe auszuwählen.</value>
+  </data>
+  <data name="Tooltip_BackgroundEyedropper" xml:space="preserve">
+    <value>Verwenden Sie die Pipette, um eine Hintergrundfarbe von Ihrem Bildschirm auszuwählen.</value>
+  </data>
+  <data name="Tooltip_BackgroundLightness" xml:space="preserve">
+    <value>Stellen Sie die wahrgenommene Helligkeit der Hintergrundfarbe ein.</value>
+  </data>
+
+  <data name="Tooltip_TextSize" xml:space="preserve">
+    <value>Stellen Sie die Textgröße in Punkten ein. Großer Text hat geringere Kontrastanforderungen.</value>
+  </data>
+  <data name="Tooltip_Bold" xml:space="preserve">
+    <value>Aktivieren Sie, wenn der Text fett ist. Fett ≥14pt gilt als großer Text.</value>
+  </data>
+  <data name="Tooltip_SampleText" xml:space="preserve">
+    <value>Geben Sie eigenen Beispieltext ein, um eine Vorschau anzuzeigen.</value>
+  </data>
+
+  <data name="Tooltip_SavePalette" xml:space="preserve">
+    <value>Speichern Sie die aktuellen Farben, Texteinstellungen und Beispieltext in einer JSON-Datei.</value>
+  </data>
+  <data name="Tooltip_LoadPalette" xml:space="preserve">
+    <value>Laden Sie zuvor gespeicherte Paletteneinstellungen aus einer JSON-Datei.</value>
+  </data>
+</root>

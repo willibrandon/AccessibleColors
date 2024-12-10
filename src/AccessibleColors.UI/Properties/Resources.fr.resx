@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter</value></resheader>
+
+  <data name="MainForm_Title" xml:space="preserve">
+    <value>Outil de Couleurs Accessibles</value>
+  </data>
+  <data name="Heading_Text" xml:space="preserve">
+    <value>AccessibleColors : Couleurs de Contraste Conformes WCAG</value>
+  </data>
+  <data name="Explanation_Heading" xml:space="preserve">
+    <value>Explication</value>
+  </data>
+  <data name="Explanation_Body" xml:space="preserve">
+    <value>Saisissez une couleur de premier plan et d’arrière-plan au format hexadécimal RGB ou choisissez une couleur à l’aide du sélecteur de couleurs. Utilisez le curseur de luminosité pour ajuster la clarté perçue de la couleur.
+
+Le niveau AA de WCAG 2.0 exige un ratio de contraste d’au moins 4,5:1 pour le texte normal et 3:1 pour le texte de grande taille. WCAG 2.1 exige un ratio de contraste d’au moins 3:1 pour les graphiques et les composants d’interface utilisateur. Le niveau AAA de WCAG exige un ratio de contraste d’au moins 7:1 pour le texte normal et 4,5:1 pour le texte de grande taille.
+
+Le texte de grande taille est défini comme étant de 14 points (environ 18,66 px) en gras ou plus, ou de 18 points (environ 24 px) ou plus.</value>
+  </data>
+
+  <data name="ForegroundColor_Label" xml:space="preserve">
+    <value>Couleur (&#35;RRGGBB) :</value>
+  </data>
+  <data name="BackgroundColor_Label" xml:space="preserve">
+    <value>Couleur (&#35;RRGGBB) :</value>
+  </data>
+  <data name="Alpha_Label" xml:space="preserve">
+    <value>Alpha (0-255) :</value>
+  </data>
+  <data name="Lightness_Label" xml:space="preserve">
+    <value>Luminosité :</value>
+  </data>
+  <data name="TextSize_Label" xml:space="preserve">
+    <value>Taille du texte (pt) :</value>
+  </data>
+  <data name="SampleText_Label" xml:space="preserve">
+    <value>Texte d’exemple :</value>
+  </data>
+  <data name="Bold_Checkbox" xml:space="preserve">
+    <value>Gras</value>
+  </data>
+  <data name="ColorPicker_Button" xml:space="preserve">
+    <value>Sélecteur de Couleur</value>
+  </data>
+  <data name="EyeDropper_Button" xml:space="preserve">
+    <value>Pipette</value>
+  </data>
+  <data name="SavePalette_Button" xml:space="preserve">
+    <value>Enregistrer la Palette</value>
+  </data>
+  <data name="LoadPalette_Button" xml:space="preserve">
+    <value>Charger la Palette</value>
+  </data>
+  <data name="LoadPalette_DialogTitle" xml:space="preserve">
+    <value>Charger la Palette</value>
+  </data>
+  <data name="SavePalette_DialogTitle" xml:space="preserve">
+    <value>Enregistrer la Palette</value>
+  </data>
+  <data name="ContrastRatio_Format" xml:space="preserve">
+    <value>Ratio de Contraste : {0:F2}:1</value>
+  </data>
+  <data name="Compliance_Compliant" xml:space="preserve">
+    <value>Conforme WCAG AA pour la taille/poids de texte spécifiés</value>
+  </data>
+  <data name="Compliance_NotCompliant" xml:space="preserve">
+    <value>Non Conform</value>
+  </data>
+  <data name="ContrastRatio_InvalidInput" xml:space="preserve">
+    <value>Entrée Invalide</value>
+  </data>
+
+  <data name="Tooltip_ForegroundColor" xml:space="preserve">
+    <value>Saisissez la couleur de premier plan au format &#35;RRGGBB.</value>
+  </data>
+  <data name="Tooltip_ForegroundPicker" xml:space="preserve">
+    <value>Ouvrir un sélecteur de couleurs pour choisir la couleur de premier plan.</value>
+  </data>
+  <data name="Tooltip_ForegroundEyedropper" xml:space="preserve">
+    <value>Utilisez la pipette pour prélever une couleur n’importe où sur votre écran.</value>
+  </data>
+  <data name="Tooltip_Alpha" xml:space="preserve">
+    <value>Ajustez la transparence (0-255) de la couleur.</value>
+  </data>
+  <data name="Tooltip_ForegroundLightness" xml:space="preserve">
+    <value>Ajustez la luminosité perçue de la couleur de premier plan.</value>
+  </data>
+
+  <data name="Tooltip_BackgroundColor" xml:space="preserve">
+    <value>Saisissez la couleur d’arrière-plan au format &#35;RRGGBB.</value>
+  </data>
+  <data name="Tooltip_BackgroundPicker" xml:space="preserve">
+    <value>Ouvrir un sélecteur de couleurs pour choisir la couleur d’arrière-plan.</value>
+  </data>
+  <data name="Tooltip_BackgroundEyedropper" xml:space="preserve">
+    <value>Utilisez la pipette pour prélever une couleur d’arrière-plan n’importe où sur votre écran.</value>
+  </data>
+  <data name="Tooltip_BackgroundLightness" xml:space="preserve">
+    <value>Ajustez la luminosité perçue de la couleur d’arrière-plan.</value>
+  </data>
+
+  <data name="Tooltip_TextSize" xml:space="preserve">
+    <value>Définissez la taille du texte en points. Le texte de grande taille a des exigences de contraste moins strictes.</value>
+  </data>
+  <data name="Tooltip_Bold" xml:space="preserve">
+    <value>Cochez si le texte est en gras. Le gras ≥14pt est considéré comme texte de grande taille.</value>
+  </data>
+  <data name="Tooltip_SampleText" xml:space="preserve">
+    <value>Saisissez votre propre texte d’exemple à prévisualiser.</value>
+  </data>
+
+  <data name="Tooltip_SavePalette" xml:space="preserve">
+    <value>Enregistrez les couleurs actuelles, les réglages de texte et le texte d’exemple au format JSON.</value>
+  </data>
+  <data name="Tooltip_LoadPalette" xml:space="preserve">
+    <value>Chargez une palette précédemment enregistrée à partir d’un fichier JSON.</value>
+  </data>
+</root>
