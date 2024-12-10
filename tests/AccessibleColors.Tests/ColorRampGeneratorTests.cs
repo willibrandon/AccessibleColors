@@ -63,73 +63,73 @@ public class ColorRampGeneratorTests(ITestOutputHelper output)
     /// A successful completion with zero fallback occurrences indicates that the ramp generator
     /// can produce fully compliant colors for all possible inputs.
     /// </summary>
-    [Fact(Skip = "Extremely long-running test.")]
-    public void GenerateAccessibleRamp_ExhaustiveTest()
-    {
-        int[] stepCounts = { 1, 2, 3, 4, 5 };
-        bool[] darkModes = { false, true };
+    // [Fact(Skip = "Extremely long-running test.")]
+    // public void GenerateAccessibleRamp_ExhaustiveTest()
+    // {
+    //    int[] stepCounts = [1, 2, 3, 4, 5];
+    //    bool[] darkModes = [false, true];
 
-        Color darkBg = Color.FromArgb(32, 32, 32);
-        Color lightBg = Color.White;
+    //    Color darkBg = Color.FromArgb(32, 32, 32);
+    //    Color lightBg = Color.White;
 
-        // Calculate total permutations for informational purposes
-        long totalPermutations = 256L * 256L * 256L * stepCounts.Length * darkModes.Length;
-        long fallbackCount = 0;
-        long count = 0;
+    //    // Calculate total permutations for informational purposes
+    //    long totalPermutations = 256L * 256L * 256L * stepCounts.Length * darkModes.Length;
+    //    long fallbackCount = 0;
+    //    long count = 0;
 
-        for (int r = 0; r <= 255; r++)
-        {
-            for (int g = 0; g <= 255; g++)
-            {
-                for (int b = 0; b <= 255; b++)
-                {
-                    Color baseColor = Color.FromArgb(r, g, b);
+    //    for (int r = 0; r <= 255; r++)
+    //    {
+    //        for (int g = 0; g <= 255; g++)
+    //        {
+    //            for (int b = 0; b <= 255; b++)
+    //            {
+    //                Color baseColor = Color.FromArgb(r, g, b);
 
-                    foreach (int steps in stepCounts)
-                    {
-                        foreach (bool darkMode in darkModes)
-                        {
-                            count++;
-                            IReadOnlyList<Color> ramp = ColorRampGenerator.GenerateAccessibleRamp(baseColor, steps, darkMode);
+    //                foreach (int steps in stepCounts)
+    //                {
+    //                    foreach (bool darkMode in darkModes)
+    //                    {
+    //                        count++;
+    //                        IReadOnlyList<Color> ramp = ColorRampGenerator.GenerateAccessibleRamp(baseColor, steps, darkMode);
 
-                            Color bg = darkMode ? darkBg : lightBg;
+    //                        Color bg = darkMode ? darkBg : lightBg;
 
-                            foreach (var c in ramp)
-                            {
-                                bool compliant = WcagContrastColor.IsCompliant(bg, c);
-                                Assert.True(compliant, $"Non-compliant color: {c} for base {baseColor}, steps={steps}, darkMode={darkMode}");
+    //                        foreach (var c in ramp)
+    //                        {
+    //                            bool compliant = WcagContrastColor.IsCompliant(bg, c);
+    //                            Assert.True(compliant, $"Non-compliant color: {c} for base {baseColor}, steps={steps}, darkMode={darkMode}");
 
-                                // Check fallback color
-                                if ((darkMode && c == Color.White) || (!darkMode && c == Color.Black))
-                                {
-                                    fallbackCount++;
-                                }
-                            }
+    //                            // Check fallback color
+    //                            if ((darkMode && c == Color.White) || (!darkMode && c == Color.Black))
+    //                            {
+    //                                fallbackCount++;
+    //                            }
+    //                        }
 
-                            // Optional: print progress occasionally (commented out by default to reduce overhead)
-                            if (count % 1_000_000 == 0)
-                            {
-                                output.WriteLine($"Tested {count}/{totalPermutations} permutations...");
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    //                        // Optional: print progress occasionally (commented out by default to reduce overhead)
+    //                        if (count % 1_000_000 == 0)
+    //                        {
+    //                            output.WriteLine($"Tested {count}/{totalPermutations} permutations...");
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
 
-        output.WriteLine($"Total permutations tested: {totalPermutations}");
-        output.WriteLine($"Fallback occurred {fallbackCount} times.");
-        double fallbackPercentage = (fallbackCount / (double)totalPermutations) * 100.0;
-        output.WriteLine($"Fallback Percentage: {fallbackPercentage:F2}%");
-    }
+    //    output.WriteLine($"Total permutations tested: {totalPermutations}");
+    //    output.WriteLine($"Fallback occurred {fallbackCount} times.");
+    //    double fallbackPercentage = (fallbackCount / (double)totalPermutations) * 100.0;
+    //    output.WriteLine($"Fallback Percentage: {fallbackPercentage:F2}%");
+    // }
 
     [Fact]
     public void GenerateAccessibleRamp_FallbackFrequencySampleTest()
     {
         // Configuration
         int colorSamples = 100_000;   // Number of random colors to sample
-        int[] stepCounts = { 1, 5, 10 };
-        bool[] darkModes = { false, true };
+        int[] stepCounts = [1, 5, 10];
+        bool[] darkModes = [false, true];
 
         // Backgrounds
         Color darkBg = Color.FromArgb(32, 32, 32);

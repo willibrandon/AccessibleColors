@@ -74,6 +74,26 @@ public static class WcagContrastColor
     }
 
     /// <summary>
+    /// Calculates the contrast ratio between two colors as defined by WCAG.
+    /// The ratio ranges from 1.0 (no contrast) to 21.0 (maximum contrast).
+    /// </summary>
+    /// <param name="background">The background <see cref="Color"/>.</param>
+    /// <param name="foreground">The foreground <see cref="Color"/> (text or UI element).</param>
+    /// <returns>The contrast ratio between the two colors.</returns>
+    /// <example>
+    /// <code>
+    /// double ratio = AccessibleColors.GetContrastRatio(Color.White, Color.Black);
+    /// // ratio would be 21.0, maximum contrast
+    /// </code>
+    /// </example>
+    public static double GetContrastRatio(Color background, Color foreground)
+    {
+        double bgLum = ColorUtilities.GetLuminance(background);
+        double fgLum = ColorUtilities.GetLuminance(foreground);
+        return ColorUtilities.CalculateContrastRatio((float)bgLum, (float)fgLum);
+    }
+
+    /// <summary>
     /// Determines whether the specified foreground and background color combination meets a given WCAG contrast ratio requirement.
     /// By default, it checks against the normal text standard (4.5:1).
     /// </summary>

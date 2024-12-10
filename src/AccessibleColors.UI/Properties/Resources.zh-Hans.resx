@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+
+  <data name="MainForm_Title" xml:space="preserve">
+    <value>无障碍颜色工具</value>
+  </data>
+  <data name="Heading_Text" xml:space="preserve">
+    <value>AccessibleColors: 符合WCAG的对比色</value>
+  </data>
+  <data name="Explanation_Heading" xml:space="preserve">
+    <value>说明</value>
+  </data>
+  <data name="Explanation_Body" xml:space="preserve">
+    <value>以RGB十六进制格式输入前景色和背景色，或使用颜色选择器选择颜色。使用亮度滑块调整颜色的感知亮度。
+
+WCAG 2.0 AA级要求正常文本的对比度至少为4.5:1，较大文本为3:1。WCAG 2.1要求图形和UI组件的对比度至少为3:1。WCAG AAA级要求正常文本至少7:1的对比度，较大文本至少4.5:1。
+
+“大文本”定义为14磅（约18.66px）加粗或更大，或18磅（约24px）或更大。</value>
+  </data>
+
+  <data name="ForegroundColor_Label" xml:space="preserve">
+    <value>颜色 (&#35;RRGGBB)：</value>
+  </data>
+  <data name="BackgroundColor_Label" xml:space="preserve">
+    <value>颜色 (&#35;RRGGBB)：</value>
+  </data>
+  <data name="Alpha_Label" xml:space="preserve">
+    <value>Alpha (0-255)：</value>
+  </data>
+  <data name="Lightness_Label" xml:space="preserve">
+    <value>亮度：</value>
+  </data>
+  <data name="TextSize_Label" xml:space="preserve">
+    <value>文字大小 (pt)：</value>
+  </data>
+  <data name="SampleText_Label" xml:space="preserve">
+    <value>示例文本：</value>
+  </data>
+  <data name="Bold_Checkbox" xml:space="preserve">
+    <value>加粗</value>
+  </data>
+  <data name="ColorPicker_Button" xml:space="preserve">
+    <value>颜色选择器</value>
+  </data>
+  <data name="EyeDropper_Button" xml:space="preserve">
+    <value>取色器</value>
+  </data>
+  <data name="SavePalette_Button" xml:space="preserve">
+    <value>保存调色板</value>
+  </data>
+  <data name="LoadPalette_Button" xml:space="preserve">
+    <value>加载调色板</value>
+  </data>
+  <data name="LoadPalette_DialogTitle" xml:space="preserve">
+    <value>加载调色板</value>
+  </data>
+  <data name="SavePalette_DialogTitle" xml:space="preserve">
+    <value>保存调色板</value>
+  </data>
+  <data name="ContrastRatio_Format" xml:space="preserve">
+    <value>对比度：{0:F2}:1</value>
+  </data>
+  <data name="Compliance_Compliant" xml:space="preserve">
+    <value>对于指定的文本大小/样式，符合WCAG AA</value>
+  </data>
+  <data name="Compliance_NotCompliant" xml:space="preserve">
+    <value>不符合要求</value>
+  </data>
+  <data name="ContrastRatio_InvalidInput" xml:space="preserve">
+    <value>无效输入</value>
+  </data>
+
+  <data name="Tooltip_ForegroundColor" xml:space="preserve">
+    <value>以&#35;RRGGBB格式输入前景色。</value>
+  </data>
+  <data name="Tooltip_ForegroundPicker" xml:space="preserve">
+    <value>打开颜色选择器对话框来选择前景色。</value>
+  </data>
+  <data name="Tooltip_ForegroundEyedropper" xml:space="preserve">
+    <value>使用取色器从屏幕上的任何位置拾取颜色。</value>
+  </data>
+  <data name="Tooltip_Alpha" xml:space="preserve">
+    <value>调整颜色的透明度(0-255)。</value>
+  </data>
+  <data name="Tooltip_ForegroundLightness" xml:space="preserve">
+    <value>调整前景色的感知亮度。</value>
+  </data>
+
+  <data name="Tooltip_BackgroundColor" xml:space="preserve">
+    <value>以&#35;RRGGBB格式输入背景色。</value>
+  </data>
+  <data name="Tooltip_BackgroundPicker" xml:space="preserve">
+    <value>打开颜色选择器对话框来选择背景色。</value>
+  </data>
+  <data name="Tooltip_BackgroundEyedropper" xml:space="preserve">
+    <value>使用取色器从屏幕上的任何位置拾取背景色。</value>
+  </data>
+  <data name="Tooltip_BackgroundLightness" xml:space="preserve">
+    <value>调整背景色的感知亮度。</value>
+  </data>
+
+  <data name="Tooltip_TextSize" xml:space="preserve">
+    <value>以点为单位设置文本大小。较大文本的对比要求较低。</value>
+  </data>
+  <data name="Tooltip_Bold" xml:space="preserve">
+    <value>勾选此项则文本加粗。加粗≥14pt被视为大文本。</value>
+  </data>
+  <data name="Tooltip_SampleText" xml:space="preserve">
+    <value>输入自定义示例文本以进行预览。</value>
+  </data>
+
+  <data name="Tooltip_SavePalette" xml:space="preserve">
+    <value>将当前颜色、文本设置和示例文本保存为JSON文件。</value>
+  </data>
+  <data name="Tooltip_LoadPalette" xml:space="preserve">
+    <value>从JSON文件中加载之前保存的调色板设置。</value>
+  </data>
+</root>

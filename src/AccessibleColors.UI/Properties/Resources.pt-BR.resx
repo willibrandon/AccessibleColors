@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+
+  <data name="MainForm_Title" xml:space="preserve">
+    <value>Ferramenta de Cores Acessíveis</value>
+  </data>
+  <data name="Heading_Text" xml:space="preserve">
+    <value>AccessibleColors: Cores de Contraste Compatíveis com WCAG</value>
+  </data>
+  <data name="Explanation_Heading" xml:space="preserve">
+    <value>Explicação</value>
+  </data>
+  <data name="Explanation_Body" xml:space="preserve">
+    <value>Insira uma cor de primeiro plano e de plano de fundo em formato hexadecimal RGB ou escolha uma cor usando o seletor de cores. Use o controle deslizante de luminosidade para ajustar a claridade percebida da cor.
+
+O nível AA do WCAG 2.0 requer uma proporção de contraste de pelo menos 4,5:1 para texto normal e 3:1 para texto grande. O WCAG 2.1 requer uma proporção de contraste de pelo menos 3:1 para gráficos e componentes da interface do usuário. O nível AAA do WCAG requer uma proporção de contraste de pelo menos 7:1 para texto normal e 4,5:1 para texto grande.
+
+Texto grande é definido como 14 pontos (aprox. 18,66px) em negrito ou maior, ou 18 pontos (aprox. 24px) ou maior.</value>
+  </data>
+
+  <data name="ForegroundColor_Label" xml:space="preserve">
+    <value>Cor (&#35;RRGGBB):</value>
+  </data>
+  <data name="BackgroundColor_Label" xml:space="preserve">
+    <value>Cor (&#35;RRGGBB):</value>
+  </data>
+  <data name="Alpha_Label" xml:space="preserve">
+    <value>Alfa (0-255):</value>
+  </data>
+  <data name="Lightness_Label" xml:space="preserve">
+    <value>Luminosidade:</value>
+  </data>
+  <data name="TextSize_Label" xml:space="preserve">
+    <value>Tamanho do Texto (pt):</value>
+  </data>
+  <data name="SampleText_Label" xml:space="preserve">
+    <value>Texto de Exemplo:</value>
+  </data>
+  <data name="Bold_Checkbox" xml:space="preserve">
+    <value>Negrito</value>
+  </data>
+  <data name="ColorPicker_Button" xml:space="preserve">
+    <value>Seletor de Cores</value>
+  </data>
+  <data name="EyeDropper_Button" xml:space="preserve">
+    <value>Conta-gotas</value>
+  </data>
+  <data name="SavePalette_Button" xml:space="preserve">
+    <value>Salvar Paleta</value>
+  </data>
+  <data name="LoadPalette_Button" xml:space="preserve">
+    <value>Carregar Paleta</value>
+  </data>
+  <data name="LoadPalette_DialogTitle" xml:space="preserve">
+    <value>Carregar Paleta</value>
+  </data>
+  <data name="SavePalette_DialogTitle" xml:space="preserve">
+    <value>Salvar Paleta</value>
+  </data>
+  <data name="ContrastRatio_Format" xml:space="preserve">
+    <value>Taxa de Contraste: {0:F2}:1</value>
+  </data>
+  <data name="Compliance_Compliant" xml:space="preserve">
+    <value>Compatível com WCAG AA para o tamanho/peso de texto especificado</value>
+  </data>
+  <data name="Compliance_NotCompliant" xml:space="preserve">
+    <value>Não Compatível</value>
+  </data>
+  <data name="ContrastRatio_InvalidInput" xml:space="preserve">
+    <value>Entrada Inválida</value>
+  </data>
+
+  <data name="Tooltip_ForegroundColor" xml:space="preserve">
+    <value>Insira a cor do primeiro plano no formato &#35;RRGGBB.</value>
+  </data>
+  <data name="Tooltip_ForegroundPicker" xml:space="preserve">
+    <value>Abra um seletor de cores para escolher a cor do primeiro plano.</value>
+  </data>
+  <data name="Tooltip_ForegroundEyedropper" xml:space="preserve">
+    <value>Use o conta-gotas para selecionar uma cor de qualquer lugar na sua tela.</value>
+  </data>
+  <data name="Tooltip_Alpha" xml:space="preserve">
+    <value>Ajuste a transparência (0-255) da cor.</value>
+  </data>
+  <data name="Tooltip_ForegroundLightness" xml:space="preserve">
+    <value>Ajuste a luminosidade percebida da cor do primeiro plano.</value>
+  </data>
+
+  <data name="Tooltip_BackgroundColor" xml:space="preserve">
+    <value>Insira a cor de fundo no formato &#35;RRGGBB.</value>
+  </data>
+  <data name="Tooltip_BackgroundPicker" xml:space="preserve">
+    <value>Abra um seletor de cores para escolher a cor de fundo.</value>
+  </data>
+  <data name="Tooltip_BackgroundEyedropper" xml:space="preserve">
+    <value>Use o conta-gotas para selecionar uma cor de fundo de qualquer lugar na tela.</value>
+  </data>
+  <data name="Tooltip_BackgroundLightness" xml:space="preserve">
+    <value>Ajuste a luminosidade percebida da cor de fundo.</value>
+  </data>
+
+  <data name="Tooltip_TextSize" xml:space="preserve">
+    <value>Defina o tamanho do texto em pontos. Texto grande possui requisitos de contraste menos rígidos.</value>
+  </data>
+  <data name="Tooltip_Bold" xml:space="preserve">
+    <value>Marque se o texto for em negrito. Negrito ≥14pt é considerado texto grande.</value>
+  </data>
+  <data name="Tooltip_SampleText" xml:space="preserve">
+    <value>Insira seu próprio texto de exemplo para visualizar.</value>
+  </data>
+
+  <data name="Tooltip_SavePalette" xml:space="preserve">
+    <value>Salve as cores atuais, configurações de texto e texto de exemplo em um arquivo JSON.</value>
+  </data>
+  <data name="Tooltip_LoadPalette" xml:space="preserve">
+    <value>Carregue as configurações de paleta previamente salvas a partir de um arquivo JSON.</value>
+  </data>
+</root>

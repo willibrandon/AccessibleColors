@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+
+  <data name="MainForm_Title" xml:space="preserve">
+    <value>アクセシブルカラー ツール</value>
+  </data>
+  <data name="Heading_Text" xml:space="preserve">
+    <value>AccessibleColors: WCAG準拠のコントラストカラー</value>
+  </data>
+  <data name="Explanation_Heading" xml:space="preserve">
+    <value>説明</value>
+  </data>
+  <data name="Explanation_Body" xml:space="preserve">
+    <value>前景色と背景色をRGBの16進形式で入力するか、カラーピッカーを使用して色を選択してください。明度スライダーを使って、色の知覚的な明るさを調整できます。
+
+WCAG 2.0レベルAAは、通常のテキストに少なくとも4.5:1、大きなテキストに少なくとも3:1のコントラスト比が必要です。WCAG 2.1では、グラフィックスやUIコンポーネントに少なくとも3:1が必要となります。WCAGレベルAAAでは、通常のテキストで少なくとも7:1、大きなテキストで少なくとも4.5:1が求められます。
+
+大きなテキストとは、14ポイント（約18.66px）以上で太字、または18ポイント（約24px）以上のテキストを指します。</value>
+  </data>
+
+  <data name="ForegroundColor_Label" xml:space="preserve">
+    <value>カラー (&#35;RRGGBB)：</value>
+  </data>
+  <data name="BackgroundColor_Label" xml:space="preserve">
+    <value>カラー (&#35;RRGGBB)：</value>
+  </data>
+  <data name="Alpha_Label" xml:space="preserve">
+    <value>アルファ (0-255)：</value>
+  </data>
+  <data name="Lightness_Label" xml:space="preserve">
+    <value>明度：</value>
+  </data>
+  <data name="TextSize_Label" xml:space="preserve">
+    <value>テキストサイズ (pt)：</value>
+  </data>
+  <data name="SampleText_Label" xml:space="preserve">
+    <value>サンプルテキスト：</value>
+  </data>
+  <data name="Bold_Checkbox" xml:space="preserve">
+    <value>太字</value>
+  </data>
+  <data name="ColorPicker_Button" xml:space="preserve">
+    <value>カラーピッカー</value>
+  </data>
+  <data name="EyeDropper_Button" xml:space="preserve">
+    <value>スポイト</value>
+  </data>
+  <data name="SavePalette_Button" xml:space="preserve">
+    <value>パレットを保存</value>
+  </data>
+  <data name="LoadPalette_Button" xml:space="preserve">
+    <value>パレットを読み込み</value>
+  </data>
+  <data name="LoadPalette_DialogTitle" xml:space="preserve">
+    <value>パレットを読み込み</value>
+  </data>
+  <data name="SavePalette_DialogTitle" xml:space="preserve">
+    <value>パレットを保存</value>
+  </data>
+  <data name="ContrastRatio_Format" xml:space="preserve">
+    <value>コントラスト比：{0:F2}:1</value>
+  </data>
+  <data name="Compliance_Compliant" xml:space="preserve">
+    <value>指定されたテキストサイズ／ウェイトでWCAG AA準拠</value>
+  </data>
+  <data name="Compliance_NotCompliant" xml:space="preserve">
+    <value>非準拠</value>
+  </data>
+  <data name="ContrastRatio_InvalidInput" xml:space="preserve">
+    <value>無効な入力</value>
+  </data>
+
+  <data name="Tooltip_ForegroundColor" xml:space="preserve">
+    <value>前景色を&#35;RRGGBB形式で入力してください。</value>
+  </data>
+  <data name="Tooltip_ForegroundPicker" xml:space="preserve">
+    <value>カラーダイアログを開いて前景色を選択します。</value>
+  </data>
+  <data name="Tooltip_ForegroundEyedropper" xml:space="preserve">
+    <value>スポイトを使って、画面上の任意の色を取得します。</value>
+  </data>
+  <data name="Tooltip_Alpha" xml:space="preserve">
+    <value>色の透過度(0-255)を調整します。</value>
+  </data>
+  <data name="Tooltip_ForegroundLightness" xml:space="preserve">
+    <value>前景色の知覚的な明度を調整します。</value>
+  </data>
+
+  <data name="Tooltip_BackgroundColor" xml:space="preserve">
+    <value>背景色を&#35;RRGGBB形式で入力してください。</value>
+  </data>
+  <data name="Tooltip_BackgroundPicker" xml:space="preserve">
+    <value>カラーダイアログを開いて背景色を選択します。</value>
+  </data>
+  <data name="Tooltip_BackgroundEyedropper" xml:space="preserve">
+    <value>スポイトを使って、画面上の任意の場所から背景色を取得します。</value>
+  </data>
+  <data name="Tooltip_BackgroundLightness" xml:space="preserve">
+    <value>背景色の知覚的な明度を調整します。</value>
+  </data>
+
+  <data name="Tooltip_TextSize" xml:space="preserve">
+    <value>テキストサイズをポイントで設定します。大きなテキストには緩和されたコントラスト要件があります。</value>
+  </data>
+  <data name="Tooltip_Bold" xml:space="preserve">
+    <value>テキストが太字の場合にチェック。太字≥14ptは大きなテキストと見なされます。</value>
+  </data>
+  <data name="Tooltip_SampleText" xml:space="preserve">
+    <value>プレビューするために独自のサンプルテキストを入力してください。</value>
+  </data>
+
+  <data name="Tooltip_SavePalette" xml:space="preserve">
+    <value>現在のカラー設定、テキスト設定、およびサンプルテキストをJSONファイルとして保存します。</value>
+  </data>
+  <data name="Tooltip_LoadPalette" xml:space="preserve">
+    <value>以前に保存したパレット設定をJSONファイルから読み込みます。</value>
+  </data>
+</root>
