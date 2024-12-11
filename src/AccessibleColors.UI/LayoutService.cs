@@ -40,7 +40,6 @@ public static class LayoutService
         Button btnSavePalette,
         Button btnLoadPalette)
     {
-        int breakpoint = 915;
         int topSectionSpacing = 10;
         int leftX = 20;
         int currentY = 20;
@@ -59,7 +58,12 @@ public static class LayoutService
         pnlContainer.SuspendLayout();
         form.SuspendLayout();
 
-        if (form.Width < breakpoint)
+        // Determine if we should use stacked mode by checking a reference control
+        // in one of the group boxes. For example, we can check the rightmost control
+        // in grpForeground or grpBackground.
+        bool useStackedMode = ShouldUseStackedMode(grpForeground, grpBackground);
+
+        if (useStackedMode)
         {
             LayoutStackedMode(
                 picLogo, lblHeading, lblExplanationHeading, txtExplanation,
@@ -247,6 +251,29 @@ public static class LayoutService
                 ScaleAllControls(ctrl, scaleX, scaleY, originalMetrics, grpForeground, grpBackground, grpTextSettings);
             }
         }
+    }
+
+    /// <summary>
+    /// Finds the widest (rightmost) visible control within a given parent control.
+    /// This helps identify if any control is approaching the right boundary.
+    /// </summary>
+    /// <param name="parent">The parent control in which to search.</param>
+    /// <returns>The widest control, or null if no controls found.</returns>
+    private static Control? FindWidestControl(Control parent)
+    {
+        Control? widest = null;
+        int maxRight = -1;
+
+        foreach (Control c in parent.Controls)
+        {
+            if (c.Visible && c.Right > maxRight)
+            {
+                maxRight = c.Right;
+                widest = c;
+            }
+        }
+
+        return widest;
     }
 
     /// <summary>
@@ -520,5 +547,51 @@ public static class LayoutService
 
         int padding = 20;
         groupBox.Height = maxBottom + padding;
+    }
+
+    /// <summary>
+    /// Determines whether stacked mode should be used by checking if any key control within
+    /// the specified group boxes touches or exceeds the right boundary of that group box.
+    /// If the control appears too close or overlapping the edge, stacked mode is chosen.
+    /// </summary>
+    /// <param name="grpForeground">The foreground group box to check.</param>
+    /// <param name="grpBackground">The background group box to check.</param>
+    /// <returns>true if stacked mode should be used; otherwise, false for wide mode.</returns>
+    private static bool ShouldUseStackedMode(GroupBox grpForeground, GroupBox grpBackground)
+    {
+        // Example logic: Identify a critical control in the group boxes
+        // that should not collide with the right edge. This could be the
+        // rightmost control in grpForeground or grpBackground.
+        // Let's find the widest control in either group box and see if it touches the edge.
+
+        Control? widestFgControl = FindWidestControl(grpForeground);
+        Control? widestBgControl = FindWidestControl(grpBackground);
+
+        // Decide which control to base decisions on. For simplicity, let's pick the "worst case":
+        // the control that sticks out the furthest overall.
+        Control? widestControl = null;
+        if (widestFgControl != null && widestBgControl != null)
+        {
+            widestControl = (widestFgControl.Right > widestBgControl.Right) ? widestFgControl : widestBgControl;
+        }
+        else if (widestFgControl != null)
+        {
+            widestControl = widestFgControl;
+        }
+        else if (widestBgControl != null)
+        {
+            widestControl = widestBgControl;
+        }
+
+        if (widestControl == null)
+        {
+            // If we can't find a relevant control, default to wide mode.
+            return false;
+        }
+
+        // Determine if the control touches the right boundary of its parent group box
+        int margin = 10; // Allow some margin so it's not exactly at the edge
+        int parentWidth = widestControl.Parent!.ClientSize.Width;
+        return (widestControl.Right + margin >= parentWidth);
     }
 }
