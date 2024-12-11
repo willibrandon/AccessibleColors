@@ -288,7 +288,14 @@ public partial class MainForm : Form
             float scaleY = (float)Height / originalFormSize.Height;
 
             // Scale all controls except we haven't handled logo separately yet
-            LayoutService.ScaleAllControls(this, scaleX, scaleY, originalMetrics, grpForeground, grpBackground);
+            LayoutService.ScaleAllControls(
+                this,
+                scaleX,
+                scaleY,
+                originalMetrics,
+                grpForeground,
+                grpBackground,
+                grpTextSettings);
 
             // Enforce a minimum size for the picLogo so it doesn't become tiny
             const int minLogoSize = 64; // Adjust as needed
@@ -310,34 +317,6 @@ public partial class MainForm : Form
         finally
         {
             ResumeLayout(true);
-        }
-    }
-
-    /// <summary>
-    /// Recursively scales all controls based on the provided scale factors.
-    /// </summary>
-    /// <param name="parent">The parent control to scale.</param>
-    /// <param name="scaleX">The horizontal scale factor.</param>
-    /// <param name="scaleY">The vertical scale factor.</param>
-    private void ScaleAllControls(Control parent, float scaleX, float scaleY)
-    {
-        foreach (Control ctrl in parent.Controls)
-        {
-            if (originalMetrics.TryGetValue(ctrl, out var metrics))
-            {
-                int newX = (int)(metrics.originalLocation.X * scaleX);
-                int newY = (int)(metrics.originalLocation.Y * scaleY);
-                int newWidth = (int)(metrics.originalSize.Width * scaleX);
-                int newHeight = (int)(metrics.originalSize.Height * scaleY);
-                ctrl.Location = new Point(newX, newY);
-                ctrl.Size = new Size(newWidth, newHeight);
-            }
-
-            // Avoid scaling child controls of certain group boxes with complex layouts
-            if (ctrl != grpForeground && ctrl != grpBackground && ctrl.HasChildren)
-            {
-                ScaleAllControls(ctrl, scaleX, scaleY);
-            }
         }
     }
 
