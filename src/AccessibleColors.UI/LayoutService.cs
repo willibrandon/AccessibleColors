@@ -2,55 +2,17 @@
 
 /// <summary>
 /// Provides layout logic separated into its own class for cleaner architecture.
-/// Handles scaling and layout adjustments for stacked or wide mode.
+/// Handles scaling and layout adjustments for both stacked (narrow) and wide modes.
 /// </summary>
 public static class LayoutService
 {
     /// <summary>
-    /// Recursively scales all controls based on the provided scale factors.
-    /// Avoids scaling inside certain containers to prevent complexity.
-    /// </summary>
-    /// <param name="parent">The parent control to scale.</param>
-    /// <param name="scaleX">The horizontal scale factor.</param>
-    /// <param name="scaleY">The vertical scale factor.</param>
-    /// <param name="originalMetrics">A dictionary mapping each control to its original location and size.</param>
-    /// <param name="grpForeground">The foreground group box, whose children are not scaled.</param>
-    /// <param name="grpBackground">The background group box, whose children are not scaled.</param>
-    public static void ScaleAllControls(
-        Control parent,
-        float scaleX,
-        float scaleY,
-        Dictionary<Control, (Point originalLocation, Size originalSize)> originalMetrics,
-        Control grpForeground,
-        Control grpBackground)
-    {
-        foreach (Control ctrl in parent.Controls)
-        {
-            if (originalMetrics.TryGetValue(ctrl, out var metrics))
-            {
-                int newX = (int)(metrics.originalLocation.X * scaleX);
-                int newY = (int)(metrics.originalLocation.Y * scaleY);
-                int newWidth = (int)(metrics.originalSize.Width * scaleX);
-                int newHeight = (int)(metrics.originalSize.Height * scaleY);
-
-                ctrl.Location = new Point(newX, newY);
-                ctrl.Size = new Size(newWidth, newHeight);
-            }
-
-            // Avoid scaling the children of certain complex group boxes
-            if (ctrl != grpForeground && ctrl != grpBackground && ctrl.HasChildren)
-            {
-                ScaleAllControls(ctrl, scaleX, scaleY, originalMetrics, grpForeground, grpBackground);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Adjusts layout for either stacked or wide mode, positioning controls appropriately.
+    /// Adjusts the layout of controls depending on whether the form is in stacked or wide mode.
+    /// Invokes the appropriate layout method and suspends/resumes layout for smoother transitions.
     /// </summary>
     /// <param name="form">The main form reference.</param>
-    /// <param name="pnlContainer">The container panel for all controls.</param>
-    /// <param name="picLogo">The picture box control for the logo.</param>
+    /// <param name="pnlContainer">The panel container holding all controls.</param>
+    /// <param name="picLogo">The logo picture box control.</param>
     /// <param name="lblHeading">The heading label control.</param>
     /// <param name="lblExplanationHeading">The explanation heading label.</param>
     /// <param name="txtExplanation">The explanation text box control.</param>
@@ -60,8 +22,8 @@ public static class LayoutService
     /// <param name="pnlPreview">The preview panel control.</param>
     /// <param name="lblContrastRatio">The contrast ratio label.</param>
     /// <param name="lblCompliance">The compliance label.</param>
-    /// <param name="btnSavePalette">The button to save the palette.</param>
-    /// <param name="btnLoadPalette">The button to load a palette.</param>
+    /// <param name="btnSavePalette">The save palette button.</param>
+    /// <param name="btnLoadPalette">The load palette button.</param>
     public static void AdjustLayoutForMode(
         Form form,
         Panel pnlContainer,
@@ -78,7 +40,7 @@ public static class LayoutService
         Button btnSavePalette,
         Button btnLoadPalette)
     {
-        int breakpoint = 800;
+        int breakpoint = 915;
         int topSectionSpacing = 10;
         int leftX = 20;
         int currentY = 20;
@@ -93,104 +55,44 @@ public static class LayoutService
 
         float lineHeight = lblHeading.Font.GetHeight();
 
+        // Suspend layout to prevent intermediate states
+        pnlContainer.SuspendLayout();
+        form.SuspendLayout();
+
         if (form.Width < breakpoint)
         {
-            // Stacked mode layout
             LayoutStackedMode(
                 picLogo, lblHeading, lblExplanationHeading, txtExplanation,
                 grpForeground, grpBackground, grpTextSettings,
                 pnlPreview, lblContrastRatio, lblCompliance, btnSavePalette, btnLoadPalette,
-                lineHeight, availableWidth, leftX, topSectionSpacing, ref currentY);
+                lineHeight, availableWidth, leftX, topSectionSpacing, ref currentY, pnlContainer);
         }
         else
         {
-            // Wide mode layout
             LayoutWideMode(
                 lblHeading, lblExplanationHeading, txtExplanation,
                 grpForeground, grpBackground, grpTextSettings,
                 pnlPreview, lblContrastRatio, lblCompliance, btnSavePalette, btnLoadPalette,
-                picLogo, availableWidth, leftX, topSectionSpacing, ref currentY);
-        }
-    }
-
-    /// <summary>
-    /// Finalizes layout after adjusting controls, setting scrollbars and ensuring the heading is visible.
-    /// </summary>
-    /// <param name="form">The main form instance.</param>
-    /// <param name="pnlContainer">The container panel of all controls.</param>
-    /// <param name="lblHeading">The heading label control to ensure visibility.</param>
-    public static void FinalizeLayout(Form form, Panel pnlContainer, Label lblHeading)
-    {
-        int maxRight = 0;
-        int maxBottom = 0;
-        foreach (Control c in pnlContainer.Controls)
-        {
-            if (c.Visible)
-            {
-                if (c.Right > maxRight) maxRight = c.Right;
-                if (c.Bottom > maxBottom) maxBottom = c.Bottom;
-            }
+                picLogo, availableWidth, leftX, topSectionSpacing, ref currentY, pnlContainer);
         }
 
-        maxRight += 20;
-        maxBottom += 50;
-
-        pnlContainer.AutoScrollPosition = new Point(0, 0);
-
-        if (maxRight <= pnlContainer.ClientSize.Width)
-        {
-            pnlContainer.AutoScrollMinSize = new Size(0, maxBottom);
-            pnlContainer.HorizontalScroll.Enabled = false;
-            pnlContainer.HorizontalScroll.Visible = false;
-            pnlContainer.HorizontalScroll.Value = 0;
-        }
-        else
-        {
-            pnlContainer.AutoScrollMinSize = new Size(maxRight, maxBottom);
-            pnlContainer.HorizontalScroll.Enabled = true;
-            pnlContainer.HorizontalScroll.Visible = true;
-        }
-
-        pnlContainer.AutoScroll = true;
+        // Resume layout after finishing adjustments
+        pnlContainer.ResumeLayout(false);
         pnlContainer.PerformLayout();
-        pnlContainer.Invalidate();
-        pnlContainer.Update();
-
-        if (pnlContainer.HorizontalScroll.Visible && maxRight <= pnlContainer.ClientSize.Width)
-        {
-            pnlContainer.HorizontalScroll.Visible = false;
-            pnlContainer.HorizontalScroll.Enabled = false;
-            pnlContainer.HorizontalScroll.Value = 0;
-            pnlContainer.AutoScrollMinSize = new Size(0, maxBottom);
-            pnlContainer.PerformLayout();
-            pnlContainer.Invalidate();
-            pnlContainer.Update();
-        }
-
-        float lineHeight = lblHeading.Font.GetHeight();
-        if (lblHeading.Width < 1 || lblHeading.Height < 1)
-        {
-            lblHeading.Width = 200;
-            lblHeading.Height = (int)(lineHeight * 2);
-        }
-        lblHeading.Visible = true;
-
-        form.AutoScroll = false;
-        form.HorizontalScroll.Visible = false;
-        form.HorizontalScroll.Enabled = false;
-        form.HorizontalScroll.Value = 0;
-        form.PerformLayout();
-        form.Invalidate();
-        form.Update();
+        form.ResumeLayout(true);
     }
 
     /// <summary>
     /// Called after the user finishes resizing the form, to re-check layout and scrollbars.
+    /// Attempts to remove unnecessary horizontal scrollbars if everything fits.
     /// </summary>
     /// <param name="form">The main form instance.</param>
-    /// <param name="pnlContainer">The panel container of all controls.</param>
+    /// <param name="pnlContainer">The container panel holding all controls.</param>
     public static void AfterResizeEnd(Form form, Panel pnlContainer)
     {
+        pnlContainer.SuspendLayout();
+        form.SuspendLayout();
+
         pnlContainer.AutoScrollPosition = new Point(0, 0);
         pnlContainer.PerformLayout();
         form.PerformLayout();
@@ -209,8 +111,6 @@ public static class LayoutService
             pnlContainer.HorizontalScroll.Enabled = false;
             pnlContainer.HorizontalScroll.Value = 0;
             pnlContainer.PerformLayout();
-            pnlContainer.Invalidate();
-            pnlContainer.Update();
         }
 
         form.AutoScroll = false;
@@ -218,14 +118,171 @@ public static class LayoutService
         form.HorizontalScroll.Enabled = false;
         form.HorizontalScroll.Value = 0;
         form.PerformLayout();
+
+        pnlContainer.ResumeLayout(false);
+        pnlContainer.PerformLayout();
+        form.ResumeLayout(true);
+
+        pnlContainer.Invalidate();
+        pnlContainer.Update();
         form.Invalidate();
         form.Update();
     }
 
     /// <summary>
-    /// Lays out controls in stacked mode, positioning logo, heading, explanation, groups, and preview in a single column.
+    /// Finalizes the layout after adjustments have been made, ensuring scrollbars only appear if needed.
+    /// Tries to remove horizontal scrollbars if content fits within the container.
     /// </summary>
-    /// <param name="picLogo">The logo picture box.</param>
+    /// <param name="form">The main form instance.</param>
+    /// <param name="pnlContainer">The panel container of all controls.</param>
+    /// <param name="lblHeading">The heading label, used to ensure it remains visible and properly sized.</param>
+
+    public static void FinalizeLayout(Form form, Panel pnlContainer, Label lblHeading)
+    {
+        // Suspend layout updates
+        pnlContainer.SuspendLayout();
+        form.SuspendLayout();
+
+        int maxRight = 0;
+        int maxBottom = 0;
+        foreach (Control c in pnlContainer.Controls)
+        {
+            if (c.Visible)
+            {
+                if (c.Right > maxRight) maxRight = c.Right;
+                if (c.Bottom > maxBottom) maxBottom = c.Bottom;
+            }
+        }
+
+        maxBottom += 50;
+
+        pnlContainer.AutoScrollPosition = new Point(0, 0);
+
+        if (maxRight <= pnlContainer.ClientSize.Width)
+        {
+            pnlContainer.AutoScrollMinSize = new Size(0, maxBottom);
+            pnlContainer.HorizontalScroll.Enabled = false;
+            pnlContainer.HorizontalScroll.Visible = false;
+            pnlContainer.HorizontalScroll.Value = 0;
+        }
+        else
+        {
+            pnlContainer.AutoScrollMinSize = new Size(maxRight, maxBottom);
+            pnlContainer.HorizontalScroll.Enabled = true;
+            pnlContainer.HorizontalScroll.Visible = true;
+        }
+
+        float lineHeight = lblHeading.Font.GetHeight();
+        if (lblHeading.Width < 1 || lblHeading.Height < 1)
+        {
+            lblHeading.Width = 200;
+            lblHeading.Height = (int)(lineHeight * 2);
+        }
+        lblHeading.Visible = true;
+
+        form.AutoScroll = false;
+        form.HorizontalScroll.Visible = false;
+        form.HorizontalScroll.Enabled = false;
+        form.HorizontalScroll.Value = 0;
+
+        // Resume layout now that we have final sizes
+        pnlContainer.ResumeLayout(false);
+        pnlContainer.PerformLayout();
+        form.ResumeLayout(true);
+        form.PerformLayout();
+        pnlContainer.PerformLayout();
+
+        // If scrollbar is visible but not needed, remove it again
+        if (pnlContainer.HorizontalScroll.Visible && maxRight <= pnlContainer.ClientSize.Width)
+        {
+            pnlContainer.AutoScrollMinSize = new Size(0, maxBottom);
+            pnlContainer.HorizontalScroll.Visible = false;
+            pnlContainer.HorizontalScroll.Enabled = false;
+            pnlContainer.HorizontalScroll.Value = 0;
+            pnlContainer.PerformLayout();
+        }
+
+        pnlContainer.Invalidate();
+        pnlContainer.Update();
+        form.Invalidate();
+        form.Update();
+    }
+
+    /// <summary>
+    /// Recursively scales all controls within a parent control based on the given scale factors.
+    /// Avoids scaling inside specified group boxes to prevent layout complexity and overlapping issues.
+    /// </summary>
+    /// <param name="parent">The parent control whose children are to be scaled.</param>
+    /// <param name="scaleX">The horizontal scale factor.</param>
+    /// <param name="scaleY">The vertical scale factor.</param>
+    /// <param name="originalMetrics">A dictionary mapping each control to its original location and size.</param>
+    /// <param name="grpForeground">The foreground group box whose child controls should not be recursively scaled.</param>
+    /// <param name="grpBackground">The background group box whose child controls should not be recursively scaled.</param>
+    /// <param name="grpTextSettings">The text settings group box whose child controls should not be recursively scaled.</param>
+    public static void ScaleAllControls(
+        Control parent,
+        float scaleX,
+        float scaleY,
+        Dictionary<Control, (Point originalLocation, Size originalSize)> originalMetrics,
+        Control grpForeground,
+        Control grpBackground,
+        Control grpTextSettings)
+    {
+        foreach (Control ctrl in parent.Controls)
+        {
+            if (originalMetrics.TryGetValue(ctrl, out var metrics))
+            {
+                int newX = (int)(metrics.originalLocation.X * scaleX);
+                int newY = (int)(metrics.originalLocation.Y * scaleY);
+                int newWidth = (int)(metrics.originalSize.Width * scaleX);
+                int newHeight = (int)(metrics.originalSize.Height * scaleY);
+
+                ctrl.Location = new Point(newX, newY);
+                ctrl.Size = new Size(newWidth, newHeight);
+            }
+
+            // Avoid scaling children of certain group boxes
+            if (ctrl != grpForeground && ctrl != grpBackground && ctrl != grpTextSettings && ctrl.HasChildren)
+            {
+                ScaleAllControls(ctrl, scaleX, scaleY, originalMetrics, grpForeground, grpBackground, grpTextSettings);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Ensures that no child controls within the given panel exceed its available width, 
+    /// adjusting their size or position to prevent horizontal overflow. If a control extends 
+    /// beyond the panel's width, its width is reduced or its position is shifted to fit within 
+    /// the visible area.
+    /// </summary>
+    /// <param name="pnlContainer">The container panel whose child controls are checked for overflow.</param>
+    private static void EnsureNoHorizontalOverflow(Panel pnlContainer)
+    {
+        foreach (Control c in pnlContainer.Controls)
+        {
+            if (c.Right > pnlContainer.ClientSize.Width)
+            {
+                int overflow = c.Right - pnlContainer.ClientSize.Width;
+                if (overflow > 0)
+                {
+                    if (c.Width - overflow > 0)
+                        c.Width -= overflow;
+                    else
+                        c.Left = Math.Max(0, pnlContainer.ClientSize.Width - c.Width - 20);
+                }
+            }
+        }
+
+        pnlContainer.PerformLayout();
+        pnlContainer.Invalidate();
+        pnlContainer.Update();
+    }
+
+    /// <summary>
+    /// Lays out controls in stacked mode, positioning them in a single column.
+    /// Ensures that no horizontal overflow occurs.
+    /// </summary>
+    /// <param name="picLogo">The picture box for the logo.</param>
     /// <param name="lblHeading">The heading label.</param>
     /// <param name="lblExplanationHeading">The explanation heading label.</param>
     /// <param name="txtExplanation">The explanation text box.</param>
@@ -239,9 +296,10 @@ public static class LayoutService
     /// <param name="btnLoadPalette">The load palette button.</param>
     /// <param name="lineHeight">The line height of the heading font for scaling.</param>
     /// <param name="availableWidth">The available width for layout.</param>
-    /// <param name="leftX">The left X coordinate start for placing controls.</param>
+    /// <param name="leftX">The left margin for controls.</param>
     /// <param name="topSectionSpacing">The vertical spacing between sections.</param>
-    /// <param name="currentY">A reference to the current Y position to place controls.</param>
+    /// <param name="currentY">A reference to the current Y position for placing controls.</param>
+    /// <param name="pnlContainer">The container panel.</param>
     private static void LayoutStackedMode(
         PictureBox picLogo,
         Label lblHeading,
@@ -259,7 +317,8 @@ public static class LayoutService
         int availableWidth,
         int leftX,
         int topSectionSpacing,
-        ref int currentY)
+        ref int currentY,
+        Panel pnlContainer)
     {
         lblHeading.AutoSize = true;
         lblHeading.MaximumSize = new Size(availableWidth, 0);
@@ -273,15 +332,12 @@ public static class LayoutService
             lblHeading.Size = new Size(100, (int)(lineHeight * 2));
         }
 
-        // Position the logo
         picLogo.Left = leftX;
         picLogo.Top = 20;
 
-        // Position heading to the right of the logo, vertically centered
         lblHeading.Left = picLogo.Right + 10;
         lblHeading.Top = picLogo.Top + (picLogo.Height - lblHeading.Height) / 2;
 
-        // Advance currentY below both logo and heading
         currentY = Math.Max(picLogo.Bottom, lblHeading.Bottom) + topSectionSpacing;
 
         lblExplanationHeading.Left = leftX;
@@ -329,10 +385,13 @@ public static class LayoutService
         btnSavePalette.Top = currentY;
         btnLoadPalette.Left = leftX + availableWidth - btnLoadPalette.Width;
         btnLoadPalette.Top = currentY;
+
+        EnsureNoHorizontalOverflow(pnlContainer);
     }
 
     /// <summary>
-    /// Lays out controls in wide mode, positioning logo, heading side-by-side, and other controls in two columns.
+    /// Lays out controls in wide mode, positioning them in two columns where appropriate.
+    /// Also ensures no horizontal overflow occurs.
     /// </summary>
     /// <param name="lblHeading">The heading label.</param>
     /// <param name="lblExplanationHeading">The explanation heading label.</param>
@@ -347,9 +406,10 @@ public static class LayoutService
     /// <param name="btnLoadPalette">The load palette button.</param>
     /// <param name="picLogo">The logo picture box.</param>
     /// <param name="availableWidth">The available width for layout.</param>
-    /// <param name="leftX">The left X coordinate start for placing controls.</param>
+    /// <param name="leftX">The left margin for controls.</param>
     /// <param name="topSectionSpacing">The vertical spacing between sections.</param>
-    /// <param name="currentY">A reference to the current Y position to place controls.</param>
+    /// <param name="currentY">A reference to the current Y position for placing controls.</param>
+    /// <param name="pnlContainer">The container panel.</param>
     private static void LayoutWideMode(
         Label lblHeading,
         Label lblExplanationHeading,
@@ -366,25 +426,21 @@ public static class LayoutService
         int availableWidth,
         int leftX,
         int topSectionSpacing,
-        ref int currentY)
+        ref int currentY,
+        Panel pnlContainer)
     {
-        // Position the logo first
         picLogo.Left = leftX;
         picLogo.Top = currentY;
-        currentY = picLogo.Bottom + topSectionSpacing;
 
-        // Configure heading in wide mode
         lblHeading.AutoSize = false;
         lblHeading.MaximumSize = Size.Empty;
         int headingWidth = Math.Max(availableWidth, 100);
         lblHeading.Width = headingWidth;
 
-        // Center lblHeading vertically relative to picLogo
         int verticalCenter = picLogo.Top + (picLogo.Height - lblHeading.Height) / 2;
         lblHeading.Left = picLogo.Right + 10;
         lblHeading.Top = verticalCenter;
 
-        // Ensure currentY accommodates both picLogo and lblHeading
         currentY = Math.Max(picLogo.Bottom, lblHeading.Bottom) + topSectionSpacing;
 
         lblExplanationHeading.AutoSize = true;
@@ -413,7 +469,6 @@ public static class LayoutService
         grpBackground.Width = halfWidth;
         ResizeGroupBoxToFitContents(grpBackground);
 
-        // Make widths symmetrical if needed
         int fgWidth = grpForeground.Width;
         int bgWidth = grpBackground.Width;
         int maxWidth = Math.Min(Math.Max(fgWidth, bgWidth), halfWidth);
@@ -446,20 +501,21 @@ public static class LayoutService
         btnSavePalette.Top = currentY;
         btnLoadPalette.Left = leftX + availableWidth - btnLoadPalette.Width;
         btnLoadPalette.Top = currentY;
+
+        EnsureNoHorizontalOverflow(pnlContainer);
     }
 
     /// <summary>
-    /// Resizes a group box to fit its contained controls by increasing its height to accommodate the tallest child control.
+    /// Resizes a given group box to fit its contained controls by increasing its height
+    /// to match the tallest child control plus some padding.
     /// </summary>
     /// <param name="groupBox">The group box to resize.</param>
-    public static void ResizeGroupBoxToFitContents(GroupBox groupBox)
+    private static void ResizeGroupBoxToFitContents(GroupBox groupBox)
     {
         int maxBottom = 0;
         foreach (Control c in groupBox.Controls)
         {
-            int bottom = c.Bottom;
-            if (bottom > maxBottom)
-                maxBottom = bottom;
+            if (c.Bottom > maxBottom) maxBottom = c.Bottom;
         }
 
         int padding = 20;
