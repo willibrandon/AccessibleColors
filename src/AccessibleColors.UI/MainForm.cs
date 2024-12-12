@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Resources;
 using System.Text.Json;
+using System.Windows.Forms;
 
 namespace AccessibleColors.UI;
 
@@ -55,6 +56,11 @@ public partial class MainForm : Form
         lblPreviewText.Visible = false;
 
         ApplyLocalization(currentCulture);
+
+        // Enable drag-and-drop functionality
+        AllowDrop = true;
+        DragEnter += MainForm_DragEnter;
+        DragDrop += MainForm_DragDrop;
     }
 
     // <summary>
@@ -194,25 +200,7 @@ public partial class MainForm : Form
         };
         if (ofd.ShowDialog() == DialogResult.OK)
         {
-            string json = File.ReadAllText(ofd.FileName);
-            var palette = JsonSerializer.Deserialize<Palette>(json);
-            if (palette != null)
-            {
-                txtForegroundColor.Text = palette.ForegroundColor;
-                txtBackgroundColor.Text = palette.BackgroundColor;
-                numForegroundAlpha.Value = palette.Alpha;
-                numTextSize.Value = (decimal)palette.TextSizePt;
-                chkBold.Checked = palette.IsBold;
-                txtSampleText.Text = palette.SampleText;
-
-                sliderForeground.Value = 100;
-                sliderBackground.Value = 100;
-
-                originalForegroundColor = ColorTranslator.FromHtml(palette.ForegroundColor);
-                originalBackgroundColor = ColorTranslator.FromHtml(palette.BackgroundColor);
-
-                UpdateContrastInfo();
-            }
+            LoadPalette(ofd.FileName);
         }
     }
 
@@ -667,5 +655,68 @@ public partial class MainForm : Form
         using var fgBrush = new SolidBrush(fgColor);
         var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
         e.Graphics.DrawString(lblPreviewText.Text, lblPreviewText.Font, fgBrush, pnlPreview.ClientRectangle, sf);
+    }
+
+    /// <summary>
+    /// Handles the DragEnter event to provide visual feedback when dragging a .json file over the form.
+    /// </summary>
+    private void MainForm_DragEnter(object sender, DragEventArgs e)
+    {
+        if (e.Data != null && e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (files.Length == 1 && Path.GetExtension(files[0]).Equals(".json", StringComparison.OrdinalIgnoreCase))
+            {
+                e.Effect = DragDropEffects.Copy;
+                e.DropImageType = DropImageType.Copy;
+                e.Message = "Load Palette";
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Handles the DragDrop event to load the palette from the dropped .json file.
+    /// </summary>
+    private void MainForm_DragDrop(object sender, DragEventArgs e)
+    {
+        if (e.Data != null && e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (files.Length == 1 && Path.GetExtension(files[0]).Equals(".json", StringComparison.OrdinalIgnoreCase))
+            {
+                LoadPalette(files[0]);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Loads a palette from a JSON file.
+    /// </summary>
+    /// <param name="filePath">The path to the JSON file.</param>
+    private void LoadPalette(string filePath)
+    {
+        string json = File.ReadAllText(filePath);
+        var palette = JsonSerializer.Deserialize<Palette>(json);
+        if (palette != null)
+        {
+            txtForegroundColor.Text = palette.ForegroundColor;
+            txtBackgroundColor.Text = palette.BackgroundColor;
+            numForegroundAlpha.Value = palette.Alpha;
+            numTextSize.Value = (decimal)palette.TextSizePt;
+            chkBold.Checked = palette.IsBold;
+            txtSampleText.Text = palette.SampleText;
+
+            sliderForeground.Value = 100;
+            sliderBackground.Value = 100;
+
+            originalForegroundColor = ColorTranslator.FromHtml(palette.ForegroundColor);
+            originalBackgroundColor = ColorTranslator.FromHtml(palette.BackgroundColor);
+
+            UpdateContrastInfo();
+        }
     }
 }
