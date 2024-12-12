@@ -2,7 +2,6 @@ using System.Globalization;
 using System.Reflection;
 using System.Resources;
 using System.Text.Json;
-using System.Windows.Forms;
 
 namespace AccessibleColors.UI;
 
@@ -238,6 +237,42 @@ public partial class MainForm : Form
     private void ChkBold_CheckedChanged(object sender, EventArgs e) => UpdateContrastInfo();
 
     /// <summary>
+    /// Handles the DragEnter event to provide visual feedback when dragging a .json file over the form.
+    /// </summary>
+    private void MainForm_DragEnter(object? sender, DragEventArgs e)
+    {
+        if (e.Data != null && e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            string[]? files = (string[]?)e.Data.GetData(DataFormats.FileDrop);
+            if (files?.Length == 1 && Path.GetExtension(files[0]).Equals(".json", StringComparison.OrdinalIgnoreCase))
+            {
+                e.Effect = DragDropEffects.Copy;
+                e.DropImageType = DropImageType.Copy;
+                e.Message = "Load Palette";
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Handles the DragDrop event to load the palette from the dropped .json file.
+    /// </summary>
+    private void MainForm_DragDrop(object? sender, DragEventArgs e)
+    {
+        if (e.Data != null && e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            string[]? files = (string[]?)e.Data.GetData(DataFormats.FileDrop);
+            if (files?.Length == 1 && Path.GetExtension(files[0]).Equals(".json", StringComparison.OrdinalIgnoreCase))
+            {
+                LoadPalette(files[0]);
+            }
+        }
+    }
+
+    /// <summary>
     /// Handles the Load event of the MainForm.
     /// Sets up tooltips, initializes original colors, updates contrast info, and records metrics.
     /// </summary>
@@ -325,19 +360,30 @@ public partial class MainForm : Form
     private void NumTextSize_ValueChanged(object sender, EventArgs e) => UpdateContrastInfo();
 
     /// <summary>
-    /// Records the initial metrics (location and size) of all controls for scaling purposes.
+    /// Handles the Paint event of pnlPreview to custom draw the preview panel with alpha blending.
     /// </summary>
-    /// <param name="parent">The parent control to record metrics from.</param>
-    private void RecordMetrics(Control parent)
+    private void PnlPreview_Paint(object? sender, PaintEventArgs e)
     {
-        foreach (Control ctrl in parent.Controls)
+        e.Graphics.Clear(Color.LightGray);
+
+        // Draw background with alpha
+        Color baseBgColor = ColorTranslator.FromHtml(txtBackgroundColor.Text);
+        int bgAlpha = (int)numBackgroundAlpha.Value;
+        Color alphaBackground = Color.FromArgb(bgAlpha, baseBgColor.R, baseBgColor.G, baseBgColor.B);
+        using (var bgBrush = new SolidBrush(alphaBackground))
         {
-            originalMetrics[ctrl] = (ctrl.Location, ctrl.Size);
-            if (ctrl.HasChildren)
-            {
-                RecordMetrics(ctrl);
-            }
+            e.Graphics.FillRectangle(bgBrush, pnlPreview.ClientRectangle);
         }
+
+        // Draw foreground text with alpha
+        var fgBase = ColorTranslator.FromHtml(txtForegroundColor.Text);
+        int fgAlpha = (int)numForegroundAlpha.Value;
+        Color fgColor = Color.FromArgb(fgAlpha, fgBase.R, fgBase.G, fgBase.B);
+
+        e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+        using var fgBrush = new SolidBrush(fgColor);
+        var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+        e.Graphics.DrawString(lblPreviewText.Text, lblPreviewText.Font, fgBrush, pnlPreview.ClientRectangle, sf);
     }
 
     /// <summary>
@@ -550,6 +596,49 @@ public partial class MainForm : Form
     }
 
     /// <summary>
+    /// Loads a palette from a JSON file.
+    /// </summary>
+    /// <param name="filePath">The path to the JSON file.</param>
+    private void LoadPalette(string filePath)
+    {
+        string json = File.ReadAllText(filePath);
+        var palette = JsonSerializer.Deserialize<Palette>(json);
+        if (palette != null)
+        {
+            txtForegroundColor.Text = palette.ForegroundColor;
+            txtBackgroundColor.Text = palette.BackgroundColor;
+            numForegroundAlpha.Value = palette.Alpha;
+            numTextSize.Value = (decimal)palette.TextSizePt;
+            chkBold.Checked = palette.IsBold;
+            txtSampleText.Text = palette.SampleText;
+
+            sliderForeground.Value = 100;
+            sliderBackground.Value = 100;
+
+            originalForegroundColor = ColorTranslator.FromHtml(palette.ForegroundColor);
+            originalBackgroundColor = ColorTranslator.FromHtml(palette.BackgroundColor);
+
+            UpdateContrastInfo();
+        }
+    }
+
+    /// <summary>
+    /// Records the initial metrics (location and size) of all controls for scaling purposes.
+    /// </summary>
+    /// <param name="parent">The parent control to record metrics from.</param>
+    private void RecordMetrics(Control parent)
+    {
+        foreach (Control ctrl in parent.Controls)
+        {
+            originalMetrics[ctrl] = (ctrl.Location, ctrl.Size);
+            if (ctrl.HasChildren)
+            {
+                RecordMetrics(ctrl);
+            }
+        }
+    }
+
+    /// <summary>
     /// Converts an RGB color to HSL representation.
     /// </summary>
     /// <param name="color">The RGB color.</param>
@@ -628,95 +717,5 @@ public partial class MainForm : Form
         Show();
         pickingForeground = false;
         pickingBackground = false;
-    }
-
-    /// <summary>
-    /// Handles the Paint event of pnlPreview to custom draw the preview panel with alpha blending.
-    /// </summary>
-    private void PnlPreview_Paint(object? sender, PaintEventArgs e)
-    {
-        e.Graphics.Clear(Color.LightGray);
-
-        // Draw background with alpha
-        Color baseBgColor = ColorTranslator.FromHtml(txtBackgroundColor.Text);
-        int bgAlpha = (int)numBackgroundAlpha.Value;
-        Color alphaBackground = Color.FromArgb(bgAlpha, baseBgColor.R, baseBgColor.G, baseBgColor.B);
-        using (var bgBrush = new SolidBrush(alphaBackground))
-        {
-            e.Graphics.FillRectangle(bgBrush, pnlPreview.ClientRectangle);
-        }
-
-        // Draw foreground text with alpha
-        var fgBase = ColorTranslator.FromHtml(txtForegroundColor.Text);
-        int fgAlpha = (int)numForegroundAlpha.Value;
-        Color fgColor = Color.FromArgb(fgAlpha, fgBase.R, fgBase.G, fgBase.B);
-
-        e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-        using var fgBrush = new SolidBrush(fgColor);
-        var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
-        e.Graphics.DrawString(lblPreviewText.Text, lblPreviewText.Font, fgBrush, pnlPreview.ClientRectangle, sf);
-    }
-
-    /// <summary>
-    /// Handles the DragEnter event to provide visual feedback when dragging a .json file over the form.
-    /// </summary>
-    private void MainForm_DragEnter(object sender, DragEventArgs e)
-    {
-        if (e.Data != null && e.Data.GetDataPresent(DataFormats.FileDrop))
-        {
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            if (files.Length == 1 && Path.GetExtension(files[0]).Equals(".json", StringComparison.OrdinalIgnoreCase))
-            {
-                e.Effect = DragDropEffects.Copy;
-                e.DropImageType = DropImageType.Copy;
-                e.Message = "Load Palette";
-            }
-            else
-            {
-                e.Effect = DragDropEffects.None;
-            }
-        }
-    }
-
-    /// <summary>
-    /// Handles the DragDrop event to load the palette from the dropped .json file.
-    /// </summary>
-    private void MainForm_DragDrop(object sender, DragEventArgs e)
-    {
-        if (e.Data != null && e.Data.GetDataPresent(DataFormats.FileDrop))
-        {
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            if (files.Length == 1 && Path.GetExtension(files[0]).Equals(".json", StringComparison.OrdinalIgnoreCase))
-            {
-                LoadPalette(files[0]);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Loads a palette from a JSON file.
-    /// </summary>
-    /// <param name="filePath">The path to the JSON file.</param>
-    private void LoadPalette(string filePath)
-    {
-        string json = File.ReadAllText(filePath);
-        var palette = JsonSerializer.Deserialize<Palette>(json);
-        if (palette != null)
-        {
-            txtForegroundColor.Text = palette.ForegroundColor;
-            txtBackgroundColor.Text = palette.BackgroundColor;
-            numForegroundAlpha.Value = palette.Alpha;
-            numTextSize.Value = (decimal)palette.TextSizePt;
-            chkBold.Checked = palette.IsBold;
-            txtSampleText.Text = palette.SampleText;
-
-            sliderForeground.Value = 100;
-            sliderBackground.Value = 100;
-
-            originalForegroundColor = ColorTranslator.FromHtml(palette.ForegroundColor);
-            originalBackgroundColor = ColorTranslator.FromHtml(palette.BackgroundColor);
-
-            UpdateContrastInfo();
-        }
     }
 }
